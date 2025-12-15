@@ -9,8 +9,10 @@ def main():
     screen_width = 800
     screen_height = 600
     screen = pygame.display.set_mode((screen_width, screen_height))
+    bg = pygame.image.load('../assets/background.png')
+    bgBig = pygame.transform.scale(bg, (2272 * 2, 1888 * 2))
 
-    pygame.display.set_caption("Bike-a-cide")
+    pygame.display.set_caption("No Lock, No Mercy")
     clock = pygame.time.Clock()
     running = True
 
@@ -31,6 +33,7 @@ def main():
         camera.update(player, screen_width, screen_height)
 
         screen.fill((255, 255, 255))
+        screen.blit(bgBig, (0, 0))
 
         player.draw(screen)
 
@@ -41,7 +44,6 @@ def main():
                 player.set_position(old_position)
 
 
-        screen.blit(player.image, camera.apply(player))
 
         pygame.display.flip()
         clock.tick(60)
