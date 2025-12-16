@@ -28,6 +28,8 @@ def main():
 
     pygame.display.set_caption("No Lock, No Mercy")
     clock = pygame.time.Clock()
+    icon = pygame.image.load('../assets/bike_holding.png')
+    pygame.display.set_icon(icon)
     running = True
 
     camera = Camera(screen_width, screen_height)
