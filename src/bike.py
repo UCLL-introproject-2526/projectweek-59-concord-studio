@@ -7,7 +7,7 @@ class Bike(Obstacle):
         self.is_bike_flag = True
 
         # Load PNG
-        self.image = pygame.image.load("../assets/bat.png").convert_alpha()
+        self.image = pygame.image.load("../assets/medium_rack.png").convert_alpha()
 
         # Scale PNG to fit the cube
         self.image = pygame.transform.scale(self.image, (width, height))
