@@ -4,6 +4,14 @@ from obstacle import Obstacle
 from camera import Camera
 from hitbox import Hitbox
 from bike import Bike
+from menu import show_menu
+
+pygame.init()
+screen_width = 800
+screen_height = 600
+screen = pygame.display.set_mode((screen_width, screen_height))
+
+show_menu(screen, screen_width, screen_height)
 
 def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
     if bgBig and bg_rect:
@@ -16,11 +24,11 @@ def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
         )
 
 def main():
-    pygame.init()
+    # pygame.init()
 
-    screen_width = 800
-    screen_height = 600
-    screen = pygame.display.set_mode((screen_width, screen_height))
+    # screen_width = 800
+    # screen_height = 600
+    # screen = pygame.display.set_mode((screen_width, screen_height))
 
     bg = pygame.image.load('../assets/background.png')
     bgBig = pygame.transform.scale(bg, (bg.get_size()[0] * 2, bg.get_size()[1] * 2)).convert()
