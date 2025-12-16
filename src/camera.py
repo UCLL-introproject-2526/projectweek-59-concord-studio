@@ -19,6 +19,6 @@ class Camera:
         self.offset.y = max(0, self.offset.y)
 
         # magic number for bg size, hardcoded for now
-        self.offset.x = min(3744, self.offset.x)
-        self.offset.y = min(3176, self.offset.y)
+        self.offset.x = min(7390, self.offset.x)
+        self.offset.y = min(7590, self.offset.y)
         #print(self.offset.x, self.offset.y)
