@@ -8,9 +8,10 @@ class Hitbox:
     SCALE_FACTOR = 2  
     
     COLOR_MAP = {
-        (255, 0, 0): 'house',
-        (0, 91, 255): 'water',
-        (255, 255, 255): 'background'
+        (255, 2, 2): 'house',
+        (0, 52, 253): 'water',
+        (255, 255, 255): 'background',
+        (255, 220, 2): 'bike-spawn'
     }
     OBSTACLE_TYPES = ['house', 'water']
 

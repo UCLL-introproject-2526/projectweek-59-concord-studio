@@ -1,12 +1,12 @@
 import pygame
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, speed=5):
         super().__init__()
         self.image = pygame.Surface((50, 50))
         self.image.fill((255, 0, 0))
         self.rect = self.image.get_rect(topleft=(x, y))
-        self.speed = 5
+        self.speed = speed
 
     def update(self, keys):
         #keys = pygame.key.get_pressed()
@@ -31,3 +31,6 @@ class Player(pygame.sprite.Sprite):
 
     def set_position(self, position):
         self.rect.topleft = position
+
+    def get_rect(self):
+        return self.rect
