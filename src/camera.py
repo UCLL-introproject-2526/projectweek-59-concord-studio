@@ -3,6 +3,7 @@ import pygame
 class Camera:
     def __init__(self, width, height):
         self.camera = pygame.Rect(0, 0, width, height)
+        self.offset = pygame.Vector2(0, 0)
         self.camera_width = width
         self.camera_height = height
 
@@ -21,3 +22,8 @@ class Camera:
         # y = max(-(self.camera_height - screen_height), y)
 
         self.camera = pygame.Rect(x, y, self.camera_width, self.camera_height)
+
+    def follow(self, target):
+        # Center the camera on the target
+        self.offset.x = target.rect.centerx - self.camera_width // 2
+        self.offset.y = target.rect.centery - self.camera_height // 2
