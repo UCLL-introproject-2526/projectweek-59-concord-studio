@@ -103,6 +103,7 @@ def main():
                     player.set_position(old_pos_player)
                 if obstacle.is_bike():
                     colliding_Bike = obstacle
+                    print("Colliding with bike")
 
             else:
                 colliding_Bike = None
