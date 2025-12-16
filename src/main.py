@@ -4,8 +4,9 @@ from obstacle import Obstacle
 from camera import Camera
 
 
-def draw(screen, camera, sprites):
-    #screen.blit(bgBig, bg_rect.topleft - camera.offset)
+def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
+    if bgBig and bg_rect:
+        screen.blit(bgBig, bg_rect.topleft - camera.offset)
 
     for sprite in sprites:
         screen.blit(
@@ -21,14 +22,16 @@ def main():
     screen = pygame.display.set_mode((screen_width, screen_height))
 
     bg = pygame.image.load('../assets/background.png')
-    bgBig = pygame.transform.scale(bg, (2272 * 2, 1888 * 2)).convert()
+    bgBig = pygame.transform.scale(bg, (bg.get_size()[0] * 2, bg.get_size()[1] * 2)).convert()
+    world_width, world_height = bgBig.get_size()
+    print(world_width, world_height)
 
     pygame.display.set_caption("No Lock, No Mercy")
     clock = pygame.time.Clock()
     running = True
 
-    camera = Camera(800, 600)
-    player = Player(400, 300)
+    camera = Camera(screen_width, screen_height)
+    player = Player(300, 300)
     obstacles = [Obstacle(100, 100, 200, 50), Obstacle(350, 100, 200, 50)]
 
     sprites = pygame.sprite.Group(player, obstacles)
@@ -38,17 +41,20 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN:
+
                 if event.key == pygame.K_ESCAPE:
                     running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                print(pygame.mouse.get_pos() + camera.offset)
 
         old_position = player.get_position()
         #player.update()
         keys = pygame.key.get_pressed()
         player.update(keys)
         camera.follow(player)
-
+        #camera.update(player, screen_width, screen_height)
         screen.fill((255, 255, 255))
-        screen.blit(bgBig, (0, 0))
+        #screen.blit(bgBig, (0, 0))
 
 
 
@@ -57,8 +63,11 @@ def main():
             if obstacle.collides_with(player.rect):
                 print("Collision detected!")
                 player.set_position(old_position)
+        # player out of bounds
+        if player.rect.left < 0 or player.rect.right > world_width or player.rect.top < 0 or player.rect.bottom > world_height:
+            player.set_position(old_position)
 
-        draw(screen, camera, sprites)
+        draw(screen, camera, sprites, bgBig, bgBig.get_rect())
         pygame.display.flip()
         clock.tick(60)
 

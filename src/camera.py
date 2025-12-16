@@ -8,22 +8,17 @@ class Camera:
         self.camera_height = height
 
     def apply(self, entity):
-        # Move the entity's rect by the camera's position
         return entity.rect.move(self.camera.topleft)
 
-    def update(self, target, screen_width, screen_height):
-        x = -target.rect.centerx + screen_width // 2
-        y = -target.rect.centery + screen_height // 2
-
-        # Keep the camera within the bounds of the world
-        # x = min(0, x)
-        # y = min(0, y)
-        # x = max(-(self.camera_width - screen_width), x)
-        # y = max(-(self.camera_height - screen_height), y)
-
-        self.camera = pygame.Rect(x, y, self.camera_width, self.camera_height)
 
     def follow(self, target):
-        # Center the camera on the target
         self.offset.x = target.rect.centerx - self.camera_width // 2
         self.offset.y = target.rect.centery - self.camera_height // 2
+
+        self.offset.x = max(0, self.offset.x)
+        self.offset.y = max(0, self.offset.y)
+
+        # magic number for bg size, hardcoded for now
+        self.offset.x = min(3744, self.offset.x)
+        self.offset.y = min(3176, self.offset.y)
+        #print(self.offset.x, self.offset.y)

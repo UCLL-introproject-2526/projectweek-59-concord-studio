@@ -6,7 +6,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.Surface((50, 50))
         self.image.fill((255, 0, 0))
         self.rect = self.image.get_rect(topleft=(x, y))
-        self.speed = 5
+        self.speed = 50
 
     def update(self, keys):
         #keys = pygame.key.get_pressed()
@@ -18,6 +18,10 @@ class Player(pygame.sprite.Sprite):
             self.rect.y -= self.speed
         if keys[pygame.K_DOWN] or keys[pygame.K_s]:
             self.rect.y += self.speed
+        if keys[pygame.K_LSHIFT]:
+            self.speed = 1
+        else:
+            self.speed = 50
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
