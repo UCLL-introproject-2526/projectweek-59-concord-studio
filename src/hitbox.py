@@ -9,7 +9,7 @@ class Hitbox:
     
     COLOR_MAP = {
         (255, 0, 0): 'house',
-        (0, 0, 255): 'water',
+        (0, 91, 255): 'water',
         (255, 255, 255): 'background'
     }
     OBSTACLE_TYPES = ['house', 'water']
