@@ -57,7 +57,7 @@ clock = pygame.time.Clock()
 player = Player(400, 300)
 camera = Camera(800, 600)
 obs = Obstacle(200, 200, 100, 100)
-bg = pygame.image.load('../assets/background.png')
+bg = pygame.image.load('../assets/images/background.png')
 bgBig = pygame.transform.scale(bg, (2272 * 2, 1888 * 2))
 
 sprites = pygame.sprite.Group(player, obs)
