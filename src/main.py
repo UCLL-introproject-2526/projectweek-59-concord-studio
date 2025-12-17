@@ -6,6 +6,7 @@ from hitbox import Hitbox
 from bike import Bike
 from menu import show_menu
 from police import Police
+from end_screen import show_end_screen
 
 def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
     if bgBig and bg_rect:
@@ -123,6 +124,17 @@ def main():
             for obstacle in obstacles:
                 if obstacle.collides_with(p.rect) and not obstacle.is_passthrough():
                     p.set_position(old_pos)
+
+        if picked_up_bike:
+            for p in police:
+                if p.rect.colliderect(player.rect):
+                    print("Busted!")
+                    
+                    result = show_end_screen(screen, screen_width, screen_height)
+                    
+                    if result == "restart":
+                        main()  
+                        return 
 
         if player.rect.left < 0 or player.rect.right > world_width or player.rect.top < 0 or player.rect.bottom > world_height:
             player.set_position(old_pos_player)
