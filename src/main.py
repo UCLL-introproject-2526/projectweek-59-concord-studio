@@ -11,6 +11,8 @@ from soundmanager import SoundManager
 import random
 import menu
 import end_screen
+import asyncio
+
 def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
     if bgBig and bg_rect:
         screen.blit(bgBig, bg_rect.topleft - camera.offset)
@@ -21,7 +23,7 @@ def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
             sprite.rect.topleft - camera.offset
         )
 
-def main():
+async def main():
     pygame.init()
 
     screen_width = 800
@@ -97,7 +99,7 @@ def main():
     if possible_cop_positions:
         cop_positions = random.sample(possible_cop_positions, min(amount_of_cops, len(possible_cop_positions)))
         for pos in cop_positions:
-            new_cop = Police(pos[0], pos[1])
+            new_cop = Police(pos[0], pos[1], hitbox_objects)
             police.append(new_cop)
             print("police:", pos)
     sprites = pygame.sprite.Group(player, obstacles, police)
@@ -187,9 +189,11 @@ def main():
 
         pygame.display.flip()
         clock.tick(60)
+        await asyncio.sleep(0)
 
     pygame.quit()
 
 if __name__ == "__main__":
-    main()
+    #main()
+    asyncio.run(main())
 

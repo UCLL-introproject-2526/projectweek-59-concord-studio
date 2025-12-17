@@ -4,7 +4,7 @@ import heapq
 from pygame.math import Vector2
 
 class Police(pygame.sprite.Sprite):
-    def __init__(self, x, y, speed=3):
+    def __init__(self, x, y, hitbox_map, speed=3):
         super().__init__()
         self.image = pygame.Surface((50, 50))
         self.image.fill((255, 255, 0))
@@ -24,7 +24,7 @@ class Police(pygame.sprite.Sprite):
         # Pathfinding setup
         self.node_size = Hitbox.TILE_SIZE * Hitbox.SCALE_FACTOR
         # load hitbox objects and build blocked set as grid coordinates
-        map_objects = Hitbox.load_map_objects('../assets/images/hitbox_map.png')
+        map_objects = hitbox_map
         self.blocked = set()
         # determine grid size from the hitbox image
         try:
