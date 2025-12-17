@@ -26,7 +26,7 @@ def main():
 
     screen_width = 800
     screen_height = 600
-    screen = pygame.display.set_mode((screen_width, screen_height))
+    screen = pygame.display.set_mode((screen_width, screen_height),pygame.RESIZABLE)
 
     menu.show_menu(screen, screen_width, screen_height)
 
@@ -35,16 +35,22 @@ def main():
     world_width, world_height = bgBig.get_size()
     print(world_width, world_height)
 
+    #mini-map 10% world size gmh
+
+    minimap_scale = 0.1
+    minimap_width = int(world_width * minimap_scale)
+    minimap_height = int(world_height * minimap_scale)
+    minimap_surface = pygame.Surface((minimap_width,minimap_height))
+
+
+     #top left Icon GMH
+    icon = pygame.image.load('../assets/cop_run_1.png')
+    pygame.display.set_icon(icon)
+
     pygame.display.set_caption("No Lock, No Mercy")
     clock = pygame.time.Clock()
     sound = SoundManager()
     sound.play_sound("background", volume=0.5, loops=-1)
-
-    #top left Icon GMH
-    icon = pygame.image.load('../assets/cop_run_1.png')
-    pygame.display.set_icon(icon)
-
-
 
     running = True
     colliding_Bike = None
@@ -61,7 +67,7 @@ def main():
     #score bored GMH
     score = 0
     pygame.font.init()
-    score_font = pygame.font.SysFont(None, 36)  # default font, size 36
+    score_font = pygame.font.SysFont(None, 36) 
 
     sprites = pygame.sprite.Group(player, *obstacles, *police, )
 
@@ -120,7 +126,7 @@ def main():
                         print("You threw the bike in the water.")
                         player.image = player.image_normal
                         picked_up_bike = None
-                        score += 1
+                        score += 100
                     elif colliding_Bike and not picked_up_bike:
                         picked_up_bike = colliding_Bike
                         sprites.remove(colliding_Bike)
@@ -173,6 +179,7 @@ def main():
                     if result == "restart":
                         main()
                     return
+       
 
 
 
@@ -180,10 +187,21 @@ def main():
         if player.rect.left < 0 or player.rect.right > world_width or player.rect.top < 0 or player.rect.bottom > world_height:
             player.set_position(old_pos_player)
 
+        #map
         draw(screen, camera, sprites, bgBig, bgBig.get_rect())
+
+        #minimap
+        #minimap_surface.fill((30,30,30))
+        #mini_bg = pygame.image.load('..\assets\mini_map.png').convert_alpha()
+        #mini_bg = pygame.transform.scale(bgBig, (minimap_width, minimap_height))
+        #minimap_surface.blit(mini_bg, (0, 0))
+
+        #screen.blit(minimap_surface,(screen_width - minimap_width - 10, 10))
         #draw score gmh
         score_text = score_font.render(f"score:{score}",True,(0,0,0))
         screen.blit(score_text,(10,10))
+
+
 
         pygame.display.flip()
         clock.tick(60)
