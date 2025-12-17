@@ -118,6 +118,10 @@ def main():
                     if not obstacle.is_passthrough():
                         p.set_position(old_pos)
 
+        for obstacle in obstacles:
+            if obstacle.can_interact(player.rect):
+                print("Press E to throw bike!")
+
 
         # player out of bounds
         if player.rect.left < 0 or player.rect.right > world_width or player.rect.top < 0 or player.rect.bottom > world_height:

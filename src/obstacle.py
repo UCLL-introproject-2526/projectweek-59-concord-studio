@@ -1,15 +1,27 @@
 import pygame
 
 class Obstacle(pygame.sprite.Sprite):
-    def __init__(self, x, y, width, height, color=(0, 0, 255), transparency = 100, passthrough=False):
+    def __init__(self, x, y, width, height,  color=(0, 0, 255), transparency = 100, passthrough=False):
         super().__init__()
+
         self.image = pygame.Surface((width, height))
         self.image.fill(color)
         self.image.set_alpha(transparency)
         self.rect = self.image.get_rect(topleft=(x, y))
+
+        #self.obstacle_type = obstacle_type
         self.passthrough = passthrough
+        self.interaction_radius = 100
+
         self.is_house_flag = True
         self.is_bike_flag = False
+
+    def can_interact(self, player_rect):
+        #if self.obstacle_type != "water": 
+        #    return False
+            
+        interaction_zone = self.rect.inflate(80, 80) 
+        return interaction_zone.colliderect(player_rect)
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
@@ -25,3 +37,10 @@ class Obstacle(pygame.sprite.Sprite):
 
     def is_house(self):
         return self.is_house_flag
+    
+    
+    # def is_river(self):
+    #     return self.obstacle_type == "River"
+
+
+
