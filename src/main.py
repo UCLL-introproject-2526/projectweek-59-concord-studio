@@ -29,6 +29,10 @@ def main():
     screen_width = 800
     screen_height = 600
     screen = pygame.display.set_mode((screen_width, screen_height))
+     #top left Icon GMH
+    icon = pygame.image.load('../assets/images/cop_run_1.png')
+    pygame.display.set_icon(icon)
+
 
     menu.show_menu(screen, screen_width, screen_height)
 
@@ -37,14 +41,15 @@ def main():
     world_width, world_height = bgBig.get_size()
     print(world_width, world_height)
 
+
+   
+
+
     pygame.display.set_caption("No Lock, No Mercy")
     clock = pygame.time.Clock()
     sound = SoundManager()
     sound.play_sound("background", volume=0.5, loops=-1)
 
-    #top left Icon GMH
-    icon = pygame.image.load('../assets/images/cop_run_1.png')
-    pygame.display.set_icon(icon)
 
 
 
