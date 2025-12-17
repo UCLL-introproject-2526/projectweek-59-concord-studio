@@ -129,7 +129,7 @@ def main():
                         print("You threw the bike in the water.")
                         player.image = player.image_normal
                         picked_up_bike = None
-                        score += 1
+                        score += 100
                     elif colliding_Bike and not picked_up_bike:
                         picked_up_bike = colliding_Bike
                         sprites.remove(colliding_Bike)
