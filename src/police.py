@@ -14,6 +14,13 @@ class Police(pygame.sprite.Sprite):
         self._pos = Vector2(self.rect.center)
         self.speed = speed
 
+        self.image_normal = pygame.image.load("../assets/cop_standing.png").convert_alpha()
+        self.image_normal = pygame.transform.scale(self.image_normal, (76, 76))
+
+        self.image = self.image_normal
+        self.rect = self.image.get_rect(topleft=(x, y))
+        self.speed = speed
+
         # Pathfinding setup
         self.node_size = Hitbox.TILE_SIZE * Hitbox.SCALE_FACTOR
         # load hitbox objects and build blocked set as grid coordinates
