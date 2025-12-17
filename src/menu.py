@@ -1,6 +1,7 @@
 import pygame
 import sys
-import soundmanager
+from soundmanager import SoundManager
+
 
 BACKGROUND_IMAGE = '../assets/main_menu.png'
 
@@ -95,7 +96,10 @@ def show_menu(screen, width, height):
 
     running = True
     while running:
+        
+        sound = SoundManager()
         sound.play_sound("menu_music") 
+
         mouse_pos = pygame.mouse.get_pos()
 
         mouse_hover_index = -1
