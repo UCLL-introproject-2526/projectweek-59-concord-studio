@@ -74,12 +74,13 @@ def main():
             possible_bike_positions.append((obj['rect'].x, obj['rect'].y))
 
 
-    amount_of_bikes = 10
+    amount_of_bikes = 30
     bike_positions = random.sample(possible_bike_positions, min(amount_of_bikes, len(possible_bike_positions)))
     for pos in bike_positions:
         bike = Bike(pos[0], pos[1], 100, 50, color=(0, 255, 0), transparency=150)
         obstacles.append(bike)
         sprites.add(bike)
+        print(pos)
 
     # print(f"Loaded {len(hitbox_objects)} hitbox objects from map.")
     # print(hitbox_objects)
