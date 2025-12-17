@@ -18,6 +18,15 @@ class Player(pygame.sprite.Sprite):
             pygame.transform.scale(pygame.image.load("../assets/thief_run_2.png").convert_alpha(), (76, 76))
         ]
 
+        self.current_frame = 0
+        self.last_update = 0
+        self.animation_delay_holding_bike = 500
+
+        self.run_with_bike = [
+            pygame.transform.scale(pygame.image.load("../assets/bike_hold_run_1.png").convert_alpha(), (90, 90)),
+            pygame.transform.scale(pygame.image.load("../assets/bike_hold_run_2.png").convert_alpha(), (90, 90))
+        ]
+
         # Current image and rect
         self.image = self.image_normal
         self.rect = self.image.get_rect(topleft=(x, y))
@@ -26,7 +35,7 @@ class Player(pygame.sprite.Sprite):
         # Animation variables
         self.current_frame = 0
         self.last_update = 0
-        self.animation_delay = 300  # milliseconds between frames
+        self.animation_delay_normal = 300  # milliseconds between frames
 
 
 
@@ -37,7 +46,7 @@ class Player(pygame.sprite.Sprite):
     def draw(self, surface):
         surface.blit(self.image, self.rect)
 
-    def update(self, keys):
+    def update(self, keys, held_bike):
         moving = False
 
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
@@ -59,13 +68,18 @@ class Player(pygame.sprite.Sprite):
             self.speed = 5
 
         now = pygame.time.get_ticks()
-        if moving:
-            if now - self.last_update > self.animation_delay:
+        if held_bike and moving:
+    # If holding a bike, show bike sprite
+            if now - self.last_update > self.animation_delay_holding_bike:
+                self.last_update = now
+                self.current_frame = (self.current_frame + 1) % len(self.run_with_bike)
+                self.image = self.run_with_bike[self.current_frame]
+        elif moving:
+            # Running animation
+            if now - self.last_update > self.animation_delay_normal:
                 self.last_update = now
                 self.current_frame = (self.current_frame + 1) % len(self.run_sprites)
                 self.image = self.run_sprites[self.current_frame]
-        else:
-            self.image = self.image_normal
 
 
     def draw(self, surface):

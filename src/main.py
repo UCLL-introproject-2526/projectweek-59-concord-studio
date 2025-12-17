@@ -137,7 +137,7 @@ def main():
         old_pos_player = player.get_position()
         old_pos_police = [p.get_position() for p in police]
         keys = pygame.key.get_pressed()
-        player.update(keys)
+        player.update(keys, picked_up_bike)
         camera.follow(player)
         screen.fill((255, 255, 255))
 
