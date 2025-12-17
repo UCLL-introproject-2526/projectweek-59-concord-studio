@@ -11,9 +11,10 @@ class Hitbox:
         (255, 2, 2): 'house',
         (0, 52, 253): 'water',
         (255, 255, 255): 'background',
-        (255, 220, 2): 'bike-spawn'
+        (255, 220, 2): 'bike-spawn',
+        (255, 0, 248): 'cop'
     }
-    OBSTACLE_TYPES = ['house', 'water', 'bike-spawn']
+    OBSTACLE_TYPES = ['house', 'water', 'bike-spawn', 'cop']
 
     @staticmethod
     def load_map_objects(image_path):
