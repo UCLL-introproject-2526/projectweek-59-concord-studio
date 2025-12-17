@@ -68,7 +68,7 @@ def main():
     #score bored GMH
     score = 0
     pygame.font.init()
-    score_font = pygame.font.SysFont(None, 36)  # default font, size 36
+    score_font = pygame.font.SysFont("consolas", 36)  
 
     sprites = pygame.sprite.Group(player, *obstacles, *police, )
 
@@ -191,7 +191,7 @@ def main():
 
         draw(screen, camera, sprites, bgBig, bgBig.get_rect())
         #draw score gmh
-        score_text = score_font.render(f"score:{score}",True,(0,0,0))
+        score_text = score_font.render(f"score:{score}",True,(255,255,255))
         screen.blit(score_text,(10,10))
 
         pygame.display.flip()
@@ -204,4 +204,3 @@ if __name__ == "__main__":
     main()
     #asyncio.run(main())
     #asyncio.run(main())
-
