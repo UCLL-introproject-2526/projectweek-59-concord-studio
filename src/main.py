@@ -46,24 +46,18 @@ def main():
 
 
 
-
     running = True
     colliding_Bike = None
     picked_up_bike = None
 
     camera = Camera(screen_width, screen_height)
     player = Player(100, 900)
-    police = [Police(600, 900)]
     possible_bike_positions = []
-    obstacles = [Bike(200, 900, 100, 50, color=(0, 255, 0), transparency=150, passthrough=True)]
+    possible_cop_positions = []
+    obstacles = [] 
+    police = []
 
-    sprites = pygame.sprite.Group(player, obstacles, police)
-
-    #score bored GMH
-    score = 0
-    pygame.font.init()
-    score_font = pygame.font.SysFont(None, 36)  # default font, size 36
-
+    sprites = pygame.sprite.Group(player, *obstacles, *police, )
 
     hitbox_objects = Hitbox.load_map_objects('../assets/hitbox_map.png')
     print(len(hitbox_objects))
@@ -81,7 +75,9 @@ def main():
             sprites.add(obstacle)
         elif obj['type'] == 'bike-spawn':
             possible_bike_positions.append((obj['rect'].x, obj['rect'].y))
-
+        elif obj['type'] == 'cop':
+            possible_cop_positions.append((obj['rect'].x, obj['rect'].y))
+    print("cop len: ", len(possible_cop_positions))
 
     amount_of_bikes = 30
     bike_positions = random.sample(possible_bike_positions, min(amount_of_bikes, len(possible_bike_positions)))
@@ -90,6 +86,14 @@ def main():
         obstacles.append(bike)
         sprites.add(bike)
         print(pos)
+
+    amount_of_cops = 5 
+    if possible_cop_positions:
+        cop_positions = random.sample(possible_cop_positions, min(amount_of_cops, len(possible_cop_positions)))
+        for pos in cop_positions:
+            new_cop = Police(pos[0], pos[1])
+            police.append(new_cop)
+            print("police:", pos)
 
     # print(f"Loaded {len(hitbox_objects)} hitbox objects from map.")
     # print(hitbox_objects)
@@ -132,6 +136,7 @@ def main():
         if picked_up_bike:
             for p in police:
                 p.update(player.get_rect())
+                print(p.get_position())
 
         current_colliding_bike = None
 
@@ -153,14 +158,12 @@ def main():
 
         if picked_up_bike:
             for p in police:
+                p.update(player.get_rect())
                 if p.rect.colliderect(player.rect):
-                    print("Busted!")
-                    
                     result = end_screen.show_end_screen(screen, screen_width, screen_height)
-                    
                     if result == "restart":
-                        main()  
-                        return 
+                        main()
+                    return
 
 
 
