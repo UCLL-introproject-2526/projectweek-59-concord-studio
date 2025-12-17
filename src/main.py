@@ -55,7 +55,7 @@ def main():
     player = Player(100, 900)
     police = [Police(600, 900)]
     possible_bike_positions = []
-    obstacles = [Bike(200, 900, 100, 50, color=(0, 255, 0), transparency=150, passthrough=True)]
+    obstacles = [Bike(200, 900, 90, 60, color=(0, 255, 0), transparency=150, passthrough=True)]
 
     sprites = pygame.sprite.Group(player, obstacles, police)
 
