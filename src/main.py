@@ -32,13 +32,13 @@ def main():
 
     pygame.display.set_caption("No Lock, No Mercy")
     clock = pygame.time.Clock()
-<<<<<<< HEAD
+
     #top left Icon GMH
-    #icon = pygame.image.load('../assets/bike_throw.png')
-    #pygame.display.set_icon(icon)
-=======
+    icon = pygame.image.load('../assets/cop_run_1.png')
+    pygame.display.set_icon(icon)
+
     
->>>>>>> 08bee28243fcb09e0586ad54e2e999feaeb9cadb
+
     running = True
     colliding_Bike = None
     picked_up_bike = None
