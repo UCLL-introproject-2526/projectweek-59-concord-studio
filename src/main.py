@@ -33,6 +33,7 @@ def main():
 
     pygame.display.set_caption("No Lock, No Mercy")
     clock = pygame.time.Clock()
+    #top left Icon GMH
     #icon = pygame.image.load('../assets/bike_throw.png')
     #pygame.display.set_icon(icon)
     running = True
@@ -58,6 +59,7 @@ def main():
             )
             obstacles.append(obstacle)
             sprites.add(obstacle)
+  
 
     # print(f"Loaded {len(hitbox_objects)} hitbox objects from map.")
     # print(hitbox_objects)
