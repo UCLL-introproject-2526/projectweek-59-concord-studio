@@ -5,10 +5,10 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         self.image_normal = pygame.image.load("../assets/thief.png").convert_alpha()
-        self.image_normal = pygame.transform.scale(self.image_normal, (140, 76))
+        self.image_normal = pygame.transform.scale(self.image_normal, (76, 76))
     
         self.image_bike = pygame.image.load("../assets/bike_hold.png").convert_alpha()
-        self.image_bike = pygame.transform.scale(self.image_bike, (170, 106))
+        self.image_bike = pygame.transform.scale(self.image_bike, (90, 90))
 
         self.image = self.image_normal
         self.rect = self.image.get_rect(topleft=(x, y))
