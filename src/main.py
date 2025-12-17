@@ -105,6 +105,7 @@ def main():
     # print(f"Loaded {len(hitbox_objects)} hitbox objects from map.")
     # print(hitbox_objects)
     while running:
+        #sound.play_sound("start_up_sfx")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False

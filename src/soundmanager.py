@@ -8,7 +8,7 @@ class SoundManager:
             "bike_throw": pygame.mixer.Sound("../sfx/bike throw.wav"),
             "background": pygame.mixer.Sound("../sfx/ingame ambient music.wav"), #added
             "start_up_sfx": pygame.mixer.Sound("../sfx/game start up.wav"),
-            "menu_music": pygame.mixer.Sound("../sfx/menu music.wav"),
+            "menu_music": pygame.mixer.Sound("../sfx/menu music.wav"), #added
             "game_over": pygame.mixer.Sound("../sfx/game over.wav") #added
 
         }
