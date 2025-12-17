@@ -11,6 +11,8 @@ from soundmanager import SoundManager
 import random
 import menu
 import end_screen
+import asyncio
+
 def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
     if bgBig and bg_rect:
         screen.blit(bgBig, bg_rect.topleft - camera.offset)
@@ -26,31 +28,25 @@ def main():
 
     screen_width = 800
     screen_height = 600
-    screen = pygame.display.set_mode((screen_width, screen_height),pygame.RESIZABLE)
+    screen = pygame.display.set_mode((screen_width, screen_height))
 
     menu.show_menu(screen, screen_width, screen_height)
 
-    bg = pygame.image.load('../assets/background.png')
+    bg = pygame.image.load('../assets/images/background.png')
     bgBig = pygame.transform.scale(bg, (bg.get_size()[0] * 2, bg.get_size()[1] * 2)).convert()
     world_width, world_height = bgBig.get_size()
     print(world_width, world_height)
-
-    #mini-map 10% world size gmh
-
-    minimap_scale = 0.1
-    minimap_width = int(world_width * minimap_scale)
-    minimap_height = int(world_height * minimap_scale)
-    minimap_surface = pygame.Surface((minimap_width,minimap_height))
-
-
-     #top left Icon GMH
-    icon = pygame.image.load('../assets/cop_run_1.png')
-    pygame.display.set_icon(icon)
 
     pygame.display.set_caption("No Lock, No Mercy")
     clock = pygame.time.Clock()
     sound = SoundManager()
     sound.play_sound("background", volume=0.5, loops=-1)
+
+    #top left Icon GMH
+    icon = pygame.image.load('../assets/images/cop_run_1.png')
+    pygame.display.set_icon(icon)
+
+
 
     running = True
     colliding_Bike = None
@@ -67,11 +63,11 @@ def main():
     #score bored GMH
     score = 0
     pygame.font.init()
-    score_font = pygame.font.SysFont(None, 36) 
+    score_font = pygame.font.SysFont(None, 36)  # default font, size 36
 
     sprites = pygame.sprite.Group(player, *obstacles, *police, )
 
-    hitbox_objects = Hitbox.load_map_objects('../assets/hitbox_map.png')
+    hitbox_objects = Hitbox.load_map_objects('../assets/images/hitbox_map.png')
     print(len(hitbox_objects))
     for obj in hitbox_objects:
         if obj['type'] == 'house' or obj['type'] == 'water':
@@ -81,6 +77,7 @@ def main():
                 obj['rect'].width,
                 obj['rect'].height,
                 obstacle_type=obj['type'],
+                transparency=0,
                 passthrough=False
             )
             obstacles.append(obstacle)
@@ -103,7 +100,7 @@ def main():
     if possible_cop_positions:
         cop_positions = random.sample(possible_cop_positions, min(amount_of_cops, len(possible_cop_positions)))
         for pos in cop_positions:
-            new_cop = Police(pos[0], pos[1])
+            new_cop = Police(pos[0], pos[1], hitbox_objects)
             police.append(new_cop)
             print("police:", pos)
     sprites = pygame.sprite.Group(player, obstacles, police)
@@ -111,6 +108,7 @@ def main():
     # print(f"Loaded {len(hitbox_objects)} hitbox objects from map.")
     # print(hitbox_objects)
     while running:
+        #sound.play_sound("start_up_sfx")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -126,7 +124,7 @@ def main():
                         print("You threw the bike in the water.")
                         player.image = player.image_normal
                         picked_up_bike = None
-                        score += 100
+                        score += 1
                     elif colliding_Bike and not picked_up_bike:
                         picked_up_bike = colliding_Bike
                         sprites.remove(colliding_Bike)
@@ -143,7 +141,7 @@ def main():
         old_pos_player = player.get_position()
         old_pos_police = [p.get_position() for p in police]
         keys = pygame.key.get_pressed()
-        player.update(keys)
+        player.update(keys, picked_up_bike)
         camera.follow(player)
         screen.fill((255, 255, 255))
 
@@ -179,7 +177,6 @@ def main():
                     if result == "restart":
                         main()
                     return
-       
 
 
 
@@ -187,27 +184,17 @@ def main():
         if player.rect.left < 0 or player.rect.right > world_width or player.rect.top < 0 or player.rect.bottom > world_height:
             player.set_position(old_pos_player)
 
-        #map
         draw(screen, camera, sprites, bgBig, bgBig.get_rect())
-
-        #minimap
-        #minimap_surface.fill((30,30,30))
-        #mini_bg = pygame.image.load('..\assets\mini_map.png').convert_alpha()
-        #mini_bg = pygame.transform.scale(bgBig, (minimap_width, minimap_height))
-        #minimap_surface.blit(mini_bg, (0, 0))
-
-        #screen.blit(minimap_surface,(screen_width - minimap_width - 10, 10))
         #draw score gmh
         score_text = score_font.render(f"score:{score}",True,(0,0,0))
         screen.blit(score_text,(10,10))
 
-
-
         pygame.display.flip()
         clock.tick(60)
+        #await asyncio.sleep(0)
 
     pygame.quit()
 
 if __name__ == "__main__":
     main()
-
+    #asyncio.run(main())
