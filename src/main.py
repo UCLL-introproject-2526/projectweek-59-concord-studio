@@ -4,15 +4,13 @@ from obstacle import Obstacle
 from camera import Camera
 from hitbox import Hitbox
 from bike import Bike
-from menu import show_menu
+#from menu import show_menu
 from police import Police
-<<<<<<< HEAD
-from end_screen import show_end_screen
-=======
+#from end_screen import show_end_screen
 from soundmanager import SoundManager
 import random
->>>>>>> 307fc28917217d28aa78d6261bdee2b99874eeaf
-
+import menu
+import end_screen
 def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
     if bgBig and bg_rect:
         screen.blit(bgBig, bg_rect.topleft - camera.offset)
@@ -30,7 +28,7 @@ def main():
     screen_height = 600
     screen = pygame.display.set_mode((screen_width, screen_height))
 
-    show_menu(screen, screen_width, screen_height)
+    menu.show_menu(screen, screen_width, screen_height)
 
     bg = pygame.image.load('../assets/background.png')
     bgBig = pygame.transform.scale(bg, (bg.get_size()[0] * 2, bg.get_size()[1] * 2)).convert()
@@ -151,7 +149,7 @@ def main():
                 if p.rect.colliderect(player.rect):
                     print("Busted!")
                     
-                    result = show_end_screen(screen, screen_width, screen_height)
+                    result = end_screen.show_end_screen(screen, screen_width, screen_height)
                     
                     if result == "restart":
                         main()  
