@@ -46,6 +46,7 @@ def main():
 
 
 
+
     running = True
     colliding_Bike = None
     picked_up_bike = None
@@ -57,6 +58,12 @@ def main():
     obstacles = [Bike(200, 900, 100, 50, color=(0, 255, 0), transparency=150, passthrough=True)]
 
     sprites = pygame.sprite.Group(player, obstacles, police)
+
+    #score bored GMH
+    score = 0
+    pygame.font.init()
+    score_font = pygame.font.SysFont(None, 36)  # default font, size 36
+
 
     hitbox_objects = Hitbox.load_map_objects('../assets/hitbox_map.png')
     print(len(hitbox_objects))
