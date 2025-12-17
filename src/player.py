@@ -5,17 +5,17 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         # Load normal sprite
-        self.image_normal = pygame.image.load("../assets/thief.png").convert_alpha()
+        self.image_normal = pygame.image.load("../assets/images/thief.png").convert_alpha()
         self.image_normal = pygame.transform.scale(self.image_normal, (76, 76))
 
         # Load bike sprite
-        self.image_bike = pygame.image.load("../assets/bike_hold.png").convert_alpha()
+        self.image_bike = pygame.image.load("../assets/images/bike_hold.png").convert_alpha()
         self.image_bike = pygame.transform.scale(self.image_bike, (90, 90))
 
         # Load running animation sprites
         self.run_sprites = [
-            pygame.transform.scale(pygame.image.load("../assets/thief_run_1.png").convert_alpha(), (76, 76)),
-            pygame.transform.scale(pygame.image.load("../assets/thief_run_2.png").convert_alpha(), (76, 76))
+            pygame.transform.scale(pygame.image.load("../assets/images/thief_run_1.png").convert_alpha(), (76, 76)),
+            pygame.transform.scale(pygame.image.load("../assets/images/thief_run_2.png").convert_alpha(), (76, 76))
         ]
 
         self.current_frame = 0
@@ -23,8 +23,8 @@ class Player(pygame.sprite.Sprite):
         self.animation_delay_holding_bike = 500
 
         self.run_with_bike = [
-            pygame.transform.scale(pygame.image.load("../assets/bike_hold_run_1.png").convert_alpha(), (90, 90)),
-            pygame.transform.scale(pygame.image.load("../assets/bike_hold_run_2.png").convert_alpha(), (90, 90))
+            pygame.transform.scale(pygame.image.load("../assets/images/bike_hold_run_1.png").convert_alpha(), (90, 90)),
+            pygame.transform.scale(pygame.image.load("../assets/images/bike_hold_run_2.png").convert_alpha(), (90, 90))
         ]
 
         # Current image and rect

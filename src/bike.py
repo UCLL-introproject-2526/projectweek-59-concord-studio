@@ -6,7 +6,7 @@ class Bike(Obstacle):
         self.is_house_flag = False
         self.is_bike_flag = True
 
-        self.image = pygame.image.load("../assets/bike.png").convert_alpha()
+        self.image = pygame.image.load("../assets/images/bike.png").convert_alpha()
 
         self.image = pygame.transform.scale(self.image, (width, height))
 

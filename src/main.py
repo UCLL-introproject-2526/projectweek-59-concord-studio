@@ -30,7 +30,7 @@ def main():
 
     menu.show_menu(screen, screen_width, screen_height)
 
-    bg = pygame.image.load('../assets/background.png')
+    bg = pygame.image.load('../assets/images/background.png')
     bgBig = pygame.transform.scale(bg, (bg.get_size()[0] * 2, bg.get_size()[1] * 2)).convert()
     world_width, world_height = bgBig.get_size()
     print(world_width, world_height)
@@ -41,7 +41,7 @@ def main():
     sound.play_sound("background", volume=0.5, loops=-1)
 
     #top left Icon GMH
-    icon = pygame.image.load('../assets/cop_run_1.png')
+    icon = pygame.image.load('../assets/images/cop_run_1.png')
     pygame.display.set_icon(icon)
 
 
@@ -65,7 +65,7 @@ def main():
 
     sprites = pygame.sprite.Group(player, *obstacles, *police, )
 
-    hitbox_objects = Hitbox.load_map_objects('../assets/hitbox_map.png')
+    hitbox_objects = Hitbox.load_map_objects('../assets/images/hitbox_map.png')
     print(len(hitbox_objects))
     for obj in hitbox_objects:
         if obj['type'] == 'house' or obj['type'] == 'water':
