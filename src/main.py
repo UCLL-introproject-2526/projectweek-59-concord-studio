@@ -29,13 +29,16 @@ def main():
     bg = pygame.image.load('../assets/background.png')
     bgBig = pygame.transform.scale(bg, (bg.get_size()[0] * 2, bg.get_size()[1] * 2)).convert()
     world_width, world_height = bgBig.get_size()
-    print(world_width, world_height)
 
     pygame.display.set_caption("No Lock, No Mercy")
     clock = pygame.time.Clock()
+<<<<<<< HEAD
     #top left Icon GMH
     #icon = pygame.image.load('../assets/bike_throw.png')
     #pygame.display.set_icon(icon)
+=======
+    
+>>>>>>> 08bee28243fcb09e0586ad54e2e999feaeb9cadb
     running = True
     colliding_Bike = None
     picked_up_bike = None
@@ -43,54 +46,54 @@ def main():
     camera = Camera(screen_width, screen_height)
     player = Player(100, 900)
     police = [Police(600, 900)]
-    obstacles = [Bike(200, 900, 100, 50, color=(0, 255, 0), transparency=150)]
+    
+    obstacles = [Bike(200, 900, 100, 50, color=(0, 255, 0), transparency=150, passthrough=True)]
 
     sprites = pygame.sprite.Group(player, obstacles, police)
 
     hitbox_objects = Hitbox.load_map_objects('../assets/hitbox_map.png')
-    print(len(hitbox_objects))
     for obj in hitbox_objects:
         if obj['type'] == 'house' or obj['type'] == 'water':
             obstacle = Obstacle(
                 obj['rect'].x,
                 obj['rect'].y,
                 obj['rect'].width,
-                obj['rect'].height
+                obj['rect'].height,
+                obstacle_type=obj['type'],
+                passthrough=False 
             )
             obstacles.append(obstacle)
             sprites.add(obstacle)
   
 
-    # print(f"Loaded {len(hitbox_objects)} hitbox objects from map.")
-    # print(hitbox_objects)
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            
             if event.type == pygame.KEYDOWN:
-
                 if event.key == pygame.K_ESCAPE:
                     running = False
 
                 if event.key == pygame.K_e:
-                    if colliding_Bike and not picked_up_bike:
+                    near_water = any(obs.can_interact(player.rect) for obs in obstacles)
+
+                    if picked_up_bike and near_water:
+                        print("You threw the bike in the water.")
+                        player.image = player.image_normal
+                        picked_up_bike = None 
+                    elif colliding_Bike and not picked_up_bike:
                         picked_up_bike = colliding_Bike
                         sprites.remove(colliding_Bike)
                         obstacles.remove(colliding_Bike)
                         player.image = player.image_bike
-                        print("Picked up the bike!")
+                        colliding_Bike = None 
                     elif picked_up_bike:
                         picked_up_bike.rect.topleft = player.rect.topleft
                         sprites.add(picked_up_bike)
                         obstacles.append(picked_up_bike)
                         player.image = player.image_normal
-                        print("Dropped the bike!")
                         picked_up_bike = None
-
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if colliding_Bike:
-                    print("Interacted with bike!")
-                    print(colliding_Bike)
 
         old_pos_player = player.get_position()
         old_pos_police = [p.get_position() for p in police]
@@ -103,29 +106,24 @@ def main():
             for p in police:
                 p.update(player.get_rect())
 
-
-        bike_change = False
+        current_colliding_bike = None
+        
         for obstacle in obstacles:
             if obstacle.collides_with(player.rect):
+                
                 if not obstacle.is_passthrough():
                     player.set_position(old_pos_player)
+                
                 if obstacle.is_bike():
-                    colliding_Bike = obstacle
-                    bike_change = True
-            elif not bike_change:
-                colliding_Bike = None
+                    current_colliding_bike = obstacle
+        
+        colliding_Bike = current_colliding_bike
 
-            for p, old_pos in zip(police, old_pos_police):
-                if obstacle.collides_with(p.rect):
-                    if not obstacle.is_passthrough():
-                        p.set_position(old_pos)
+        for p, old_pos in zip(police, old_pos_police):
+            for obstacle in obstacles:
+                if obstacle.collides_with(p.rect) and not obstacle.is_passthrough():
+                    p.set_position(old_pos)
 
-        for obstacle in obstacles:
-            if obstacle.can_interact(player.rect):
-                print("Press E to throw bike!")
-
-
-        # player out of bounds
         if player.rect.left < 0 or player.rect.right > world_width or player.rect.top < 0 or player.rect.bottom > world_height:
             player.set_position(old_pos_player)
 
@@ -137,4 +135,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
