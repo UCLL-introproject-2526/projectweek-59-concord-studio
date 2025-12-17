@@ -23,7 +23,7 @@ def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
             sprite.rect.topleft - camera.offset
         )
 
-async def main():
+def main():
     pygame.init()
 
     screen_width = 800
@@ -99,7 +99,7 @@ async def main():
     if possible_cop_positions:
         cop_positions = random.sample(possible_cop_positions, min(amount_of_cops, len(possible_cop_positions)))
         for pos in cop_positions:
-            new_cop = Police(pos[0], pos[1], hitbox_objects)
+            new_cop = Police(pos[0], pos[1], hitbox_objects, 2)
             police.append(new_cop)
             print("police:", pos)
     sprites = pygame.sprite.Group(player, obstacles, police)
@@ -190,11 +190,11 @@ async def main():
 
         pygame.display.flip()
         clock.tick(60)
-        await asyncio.sleep(0)
+        #await asyncio.sleep(0)
 
     pygame.quit()
 
 if __name__ == "__main__":
-    #main()
-    asyncio.run(main())
+    main()
+    #asyncio.run(main())
 
