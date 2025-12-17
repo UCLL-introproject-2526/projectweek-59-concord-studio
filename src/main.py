@@ -77,6 +77,7 @@ def main():
                 obj['rect'].width,
                 obj['rect'].height,
                 obstacle_type=obj['type'],
+                transparency=0,
                 passthrough=False
             )
             obstacles.append(obstacle)
