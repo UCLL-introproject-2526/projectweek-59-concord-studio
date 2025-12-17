@@ -75,11 +75,13 @@ def main():
                         picked_up_bike = colliding_Bike
                         sprites.remove(colliding_Bike)
                         obstacles.remove(colliding_Bike)
+                        player.image = player.image_bike
                         print("Picked up the bike!")
                     elif picked_up_bike:
                         picked_up_bike.rect.topleft = player.rect.topleft
                         sprites.add(picked_up_bike)
                         obstacles.append(picked_up_bike)
+                        player.image = player.image_normal
                         print("Dropped the bike!")
                         picked_up_bike = None
 

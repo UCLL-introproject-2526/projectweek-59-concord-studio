@@ -3,10 +3,24 @@ import pygame
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, speed=5):
         super().__init__()
-        self.image = pygame.Surface((50, 50))
-        self.image.fill((255, 0, 0))
+
+        self.image_normal = pygame.image.load("../assets/thief.png").convert_alpha()
+        self.image_normal = pygame.transform.scale(self.image_normal, (140, 76))
+    
+        self.image_bike = pygame.image.load("../assets/bike_hold.png").convert_alpha()
+        self.image_bike = pygame.transform.scale(self.image_bike, (170, 106))
+
+        self.image = self.image_normal
         self.rect = self.image.get_rect(topleft=(x, y))
         self.speed = speed
+
+
+        # thief_size = pygame.transform.scale(self.image, (self.image.get_size()[0] * 1, self.image.get_size()[1] * 1)).convert()
+        # self.image = thief_size.convert_alpha()
+        # self.rect = self.image.get_rect(topleft=(x, y))
+
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)
 
     def update(self, keys):
         #keys = pygame.key.get_pressed()
@@ -34,3 +48,4 @@ class Player(pygame.sprite.Sprite):
 
     def get_rect(self):
         return self.rect
+    
