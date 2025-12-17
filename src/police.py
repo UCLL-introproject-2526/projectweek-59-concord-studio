@@ -18,7 +18,7 @@ class Police(pygame.sprite.Sprite):
         self.image_normal = pygame.transform.scale(self.image_normal, (76, 76))
 
         self.image = self.image_normal
-        self.rect = self.image.get_rect(topleft=(x, y))
+        #self.rect = self.image.get_rect(topleft=(x, y))
         self.speed = speed
 
         # Pathfinding setup
