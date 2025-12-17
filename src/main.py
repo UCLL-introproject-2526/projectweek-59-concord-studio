@@ -31,7 +31,7 @@ def main():
     pygame.display.set_caption("No Lock, No Mercy")
     clock = pygame.time.Clock()
     #icon = pygame.image.load('../assets/bike_throw.png')
-   # pygame.display.set_icon(icon)
+    #pygame.display.set_icon(icon)
     running = True
     colliding_Bike = None
     picked_up_bike = None
@@ -97,21 +97,22 @@ def main():
                 p.update(player.get_rect())
 
 
+        bike_change = False
         for obstacle in obstacles:
             if obstacle.collides_with(player.rect):
                 if not obstacle.is_passthrough():
                     player.set_position(old_pos_player)
                 if obstacle.is_bike():
                     colliding_Bike = obstacle
-                    print("Colliding with bike")
-
-            else:
+                    bike_change = True
+            elif not bike_change:
                 colliding_Bike = None
 
             for p, old_pos in zip(police, old_pos_police):
                 if obstacle.collides_with(p.rect):
                     if not obstacle.is_passthrough():
                         p.set_position(old_pos)
+
 
         # player out of bounds
         if player.rect.left < 0 or player.rect.right > world_width or player.rect.top < 0 or player.rect.bottom > world_height:
