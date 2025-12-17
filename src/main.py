@@ -56,6 +56,14 @@ def main():
     possible_cop_positions = []
     obstacles = [] 
     police = []
+    obstacles = [Bike(200, 900, 90, 60, color=(0, 255, 0), transparency=150, passthrough=True)]
+
+    sprites = pygame.sprite.Group(player, obstacles, police)
+
+    #score bored GMH
+    score = 0
+    pygame.font.init()
+    score_font = pygame.font.SysFont(None, 36)  # default font, size 36
 
     sprites = pygame.sprite.Group(player, *obstacles, *police, )
 
