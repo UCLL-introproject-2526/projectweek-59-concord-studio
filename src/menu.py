@@ -1,15 +1,16 @@
 import pygame
 import sys
-import soundmanager
+from soundmanager import SoundManager
 
-BACKGROUND_IMAGE = '../assets/main_menu.png'
 
-PLAY_NORMAL_IMAGE = '../assets/play.png'  
-PLAY_HOVER_IMAGE = '../assets/play_selected.png'   
-CREDITS_NORMAL_IMAGE = '../assets/credits.png'  
-CREDITS_HOVER_IMAGE = '../assets/credits_selected.png' 
-QUIT_NORMAL_IMAGE = '../assets/quit.png'   
-QUIT_HOVER_IMAGE = '../assets/quit_selected.png'    
+BACKGROUND_IMAGE = '../assets/images/main_menu.png'
+
+PLAY_NORMAL_IMAGE = '../assets/images/play.png'
+PLAY_HOVER_IMAGE = '../assets/images/play_selected.png'
+CREDITS_NORMAL_IMAGE = '../assets/images/credits.png'
+CREDITS_HOVER_IMAGE = '../assets/images/credits_selected.png'
+QUIT_NORMAL_IMAGE = '../assets/images/quit.png'
+QUIT_HOVER_IMAGE = '../assets/images/quit_selected.png'
 
 TARGET_WIDTH = 230
 TARGET_HEIGHT = 210
@@ -95,7 +96,10 @@ def show_menu(screen, width, height):
 
     running = True
     while running:
+        
+        sound = SoundManager()
         sound.play_sound("menu_music") 
+
         mouse_pos = pygame.mouse.get_pos()
 
         mouse_hover_index = -1

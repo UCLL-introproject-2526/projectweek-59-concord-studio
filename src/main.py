@@ -11,6 +11,8 @@ from soundmanager import SoundManager
 import random
 import menu
 import end_screen
+import asyncio
+
 def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
     if bgBig and bg_rect:
         screen.blit(bgBig, bg_rect.topleft - camera.offset)
@@ -21,7 +23,7 @@ def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
             sprite.rect.topleft - camera.offset
         )
 
-def main():
+async def main():
     pygame.init()
 
     screen_width = 800
@@ -30,7 +32,7 @@ def main():
 
     menu.show_menu(screen, screen_width, screen_height)
 
-    bg = pygame.image.load('../assets/background.png')
+    bg = pygame.image.load('../assets/images/background.png')
     bgBig = pygame.transform.scale(bg, (bg.get_size()[0] * 2, bg.get_size()[1] * 2)).convert()
     world_width, world_height = bgBig.get_size()
     print(world_width, world_height)
@@ -41,7 +43,7 @@ def main():
     sound.play_sound("background", volume=0.5, loops=-1)
 
     #top left Icon GMH
-    icon = pygame.image.load('../assets/cop_run_1.png')
+    icon = pygame.image.load('../assets/images/cop_run_1.png')
     pygame.display.set_icon(icon)
 
 
@@ -64,7 +66,7 @@ def main():
 
     sprites = pygame.sprite.Group(player, *obstacles, *police, )
 
-    hitbox_objects = Hitbox.load_map_objects('../assets/hitbox_map.png')
+    hitbox_objects = Hitbox.load_map_objects('../assets/images/hitbox_map.png')
     print(len(hitbox_objects))
     for obj in hitbox_objects:
         if obj['type'] == 'house' or obj['type'] == 'water':
@@ -96,7 +98,7 @@ def main():
     if possible_cop_positions:
         cop_positions = random.sample(possible_cop_positions, min(amount_of_cops, len(possible_cop_positions)))
         for pos in cop_positions:
-            new_cop = Police(pos[0], pos[1])
+            new_cop = Police(pos[0], pos[1], hitbox_objects)
             police.append(new_cop)
             print("police:", pos)
     sprites = pygame.sprite.Group(player, obstacles, police)
@@ -186,9 +188,11 @@ def main():
 
         pygame.display.flip()
         clock.tick(60)
+        await asyncio.sleep(0)
 
     pygame.quit()
 
 if __name__ == "__main__":
-    main()
+    #main()
+    asyncio.run(main())
 
