@@ -27,11 +27,13 @@ class Player(pygame.sprite.Sprite):
             pygame.transform.scale(pygame.image.load("../assets/bike_hold_run_2.png").convert_alpha(), (90, 90))
         ]
 
-        self.current_frame = 0
-        self.last_update = 0
-        self.animation_duration_throwing_bike = 200
+        #VERY IMPORTANT!!! DON'T DELETE CODE BELOW!!!
 
-        self.bike_throw = pygame.transform.scale(pygame.image.load("../assets/bike_throw.png").convert_alpha(), (90, 90))
+        # self.current_frame = 0
+        # self.last_update = 0
+        # self.animation_duration_throwing_bike = 200
+
+        # self.bike_throw = pygame.transform.scale(pygame.image.load("../assets/bike_throw.png").convert_alpha(), (90, 90))
 
         # Current image and rect
         self.image = self.image_normal
