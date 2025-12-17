@@ -109,6 +109,7 @@ def main():
                         print("You threw the bike in the water.")
                         player.image = player.image_normal
                         picked_up_bike = None
+                        score += 1
                     elif colliding_Bike and not picked_up_bike:
                         picked_up_bike = colliding_Bike
                         sprites.remove(colliding_Bike)
@@ -169,6 +170,10 @@ def main():
             player.set_position(old_pos_player)
 
         draw(screen, camera, sprites, bgBig, bgBig.get_rect())
+        #draw score gmh
+        score_text = score_font.render(f"score:{score}",True,(0,0,0))
+        screen.blit(score_text,(10,10))
+
         pygame.display.flip()
         clock.tick(60)
 
