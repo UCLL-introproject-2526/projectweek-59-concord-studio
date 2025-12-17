@@ -57,8 +57,6 @@ def main():
     police = [Police(500, 900)]
     obstacles = [Bike(200, 900, 90, 60, color=(0, 255, 0), transparency=150, passthrough=True)]
 
-    sprites = pygame.sprite.Group(player, obstacles, police)
-
     #score bored GMH
     score = 0
     pygame.font.init()
@@ -101,6 +99,7 @@ def main():
             new_cop = Police(pos[0], pos[1])
             police.append(new_cop)
             print("police:", pos)
+    sprites = pygame.sprite.Group(player, obstacles, police)
 
     # print(f"Loaded {len(hitbox_objects)} hitbox objects from map.")
     # print(hitbox_objects)
@@ -137,7 +136,7 @@ def main():
         old_pos_player = player.get_position()
         old_pos_police = [p.get_position() for p in police]
         keys = pygame.key.get_pressed()
-        player.update(keys)
+        player.update(keys, picked_up_bike)
         camera.follow(player)
         screen.fill((255, 255, 255))
 
@@ -168,6 +167,7 @@ def main():
             for p in police:
                 p.update(player.get_rect())
                 if p.rect.colliderect(player.rect):
+                    sound.play_sound("game_over") 
                     result = end_screen.show_end_screen(screen, screen_width, screen_height)
                     if result == "restart":
                         main()
