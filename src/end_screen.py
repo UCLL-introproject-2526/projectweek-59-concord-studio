@@ -1,9 +1,9 @@
 import pygame
 import sys
 
-BACKGROUND_IMAGE = '../assets/game_over_screen.png'  
-RESTART_NORMAL = '../assets/try_again.png'      
-RESTART_HOVER = '../assets/try_again_selected.png'
+BACKGROUND_IMAGE = '../assets/images/game_over_screen.png'
+RESTART_NORMAL = '../assets/images/try_again.png'
+RESTART_HOVER = '../assets/images/try_again_selected.png'
 
 TARGET_WIDTH = 200
 TARGET_HEIGHT = 180
