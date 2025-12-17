@@ -6,10 +6,10 @@ class SoundManager:
         self.sounds = {
             "chase": pygame.mixer.Sound("../sfx/audio cop chase.wav"),
             "bike_throw": pygame.mixer.Sound("../sfx/bike throw.wav"),
-            "background": pygame.mixer.Sound("../sfx/ingame ambient music.wav"),
+            "background": pygame.mixer.Sound("../sfx/ingame ambient music.wav"), #added
             "start_up_sfx": pygame.mixer.Sound("../sfx/game start up.wav"),
             "menu_music": pygame.mixer.Sound("../sfx/menu music.wav"),
-            "game_over": pygame.mixer.Sound("../sfx/game over.wav")
+            "game_over": pygame.mixer.Sound("../sfx/game over.wav") #added
 
         }
 
