@@ -1,6 +1,7 @@
 import pygame
 from hitbox import Hitbox
 import heapq
+from pygame.math import Vector2
 
 class Police(pygame.sprite.Sprite):
     def __init__(self, x, y, speed=3):
@@ -9,6 +10,8 @@ class Police(pygame.sprite.Sprite):
         self.image.fill((255, 255, 0))
         self.image.set_alpha(190)
         self.rect = self.image.get_rect(topleft=(x, y))
+        # keep a float-precision center position to avoid integer rounding jitter
+        self._pos = Vector2(self.rect.center)
         self.speed = speed
 
         # Pathfinding setup
@@ -161,37 +164,39 @@ class Police(pygame.sprite.Sprite):
         if self.path:
             # advance path_index if close to current waypoint
             if self.path_index < len(self.path):
-                waypoint = self.path[self.path_index]
-                dx = waypoint[0] - self.rect.centerx
-                dy = waypoint[1] - self.rect.centery
-                dist_sq = dx * dx + dy * dy
-                if dist_sq <= (self.reached_target_threshold ** 2):
+                waypoint = Vector2(self.path[self.path_index])
+                # compute vector from current float center to waypoint
+                delta = waypoint - self._pos
+                dist = delta.length()
+                # if we're very close to the waypoint, snap to it and advance the index
+                threshold = float(max(self.reached_target_threshold, self.speed))
+                if dist <= threshold:
+                    self._pos = Vector2(waypoint)
                     self.path_index += 1
                 else:
-                    # move towards waypoint proportional to speed
-                    dist = max(1, (dist_sq ** 0.5))
-                    vx = (dx / dist) * self.speed
-                    vy = (dy / dist) * self.speed
-                    # apply movement
-                    self.rect.x += int(round(vx))
-                    self.rect.y += int(round(vy))
+                    # move towards waypoint using float position to avoid rounding jitter
+                    movement = delta.normalize() * self.speed
+                    self._pos += movement
+                # sync rect center to the float position
+                self.rect.center = (int(round(self._pos.x)), int(round(self._pos.y)))
             else:
                 # reached end of path
                 self.path = []
                 self.path_index = 0
         else:
             # fallback: direct movement (old behavior)
+            # use float position for fallback as well to reduce jitter
             epsilon = 5
-            if abs(self.rect.x - target_rect.x) > epsilon:
-                if self.rect.x < target_rect.x:
-                    self.rect.x += self.speed
-                elif self.rect.x > target_rect.x:
-                    self.rect.x -= self.speed
-            if abs(self.rect.y - target_rect.y) > epsilon:
-                if self.rect.y < target_rect.y:
-                    self.rect.y += self.speed
-                elif self.rect.y > target_rect.y:
-                    self.rect.y -= self.speed
+            target_center = Vector2(target_rect.center)
+            delta = target_center - self._pos
+            if delta.length() > epsilon:
+                move = delta.normalize() * self.speed
+                # if very close, snap instead of overshooting
+                if delta.length() <= self.speed:
+                    self._pos = Vector2(target_center)
+                else:
+                    self._pos += move
+                self.rect.center = (int(round(self._pos.x)), int(round(self._pos.y)))
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
@@ -201,4 +206,5 @@ class Police(pygame.sprite.Sprite):
 
     def set_position(self, position):
         self.rect.topleft = position
-
+        # keep float center position in sync
+        self._pos = Vector2(self.rect.center)
