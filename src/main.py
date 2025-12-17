@@ -4,6 +4,7 @@ from obstacle import Obstacle
 from camera import Camera
 from hitbox import Hitbox
 from bike import Bike
+from menu import show_menu
 from police import Police
 
 def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
@@ -22,6 +23,8 @@ def main():
     screen_width = 800
     screen_height = 600
     screen = pygame.display.set_mode((screen_width, screen_height))
+
+    show_menu(screen, screen_width, screen_height)
 
     bg = pygame.image.load('../assets/background.png')
     bgBig = pygame.transform.scale(bg, (bg.get_size()[0] * 2, bg.get_size()[1] * 2)).convert()
