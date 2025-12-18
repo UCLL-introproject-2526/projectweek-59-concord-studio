@@ -13,7 +13,7 @@ IMAGE_WIDTH = 150
 
 CREDITS_DATA = [
     "IMG:assets/images/LogoName.png",
-    "IMG:assets/images/cop_running_2.png" 
+    "IMG:assets/images/credits_jail.png" 
     "",
     "--- DEVELOPERS ---",
     "IMG:assets/images/Adan_8bit.png",
