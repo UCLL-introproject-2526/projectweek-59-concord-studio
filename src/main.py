@@ -29,6 +29,10 @@ def main():
     screen_width = 800
     screen_height = 600
     screen = pygame.display.set_mode((screen_width, screen_height))
+     #top left Icon GMH
+    icon = pygame.image.load('../assets/images/cop_run_1.png')
+    pygame.display.set_icon(icon)
+
 
     menu.show_menu(screen, screen_width, screen_height)
 
@@ -37,14 +41,15 @@ def main():
     world_width, world_height = bgBig.get_size()
     print(world_width, world_height)
 
+
+   
+
+
     pygame.display.set_caption("No Lock, No Mercy")
     clock = pygame.time.Clock()
     sound = SoundManager()
     sound.play_sound("background", volume=0.5, loops=-1)
 
-    #top left Icon GMH
-    icon = pygame.image.load('../assets/images/cop_run_1.png')
-    pygame.display.set_icon(icon)
 
 
 
@@ -63,7 +68,7 @@ def main():
     #score bored GMH
     score = 0
     pygame.font.init()
-    score_font = pygame.font.SysFont(None, 36)  # default font, size 36
+    score_font = pygame.font.SysFont("consolas", 36)  
 
     sprites = pygame.sprite.Group(player, *obstacles, *police, )
 
@@ -124,7 +129,7 @@ def main():
                         print("You threw the bike in the water.")
                         player.image = player.image_normal
                         picked_up_bike = None
-                        score += 1
+                        score += 100
                     elif colliding_Bike and not picked_up_bike:
                         picked_up_bike = colliding_Bike
                         sprites.remove(colliding_Bike)
@@ -184,7 +189,7 @@ def main():
 
         draw(screen, camera, sprites, bgBig, bgBig.get_rect())
         #draw score gmh
-        score_text = score_font.render(f"score:{score}",True,(0,0,0))
+        score_text = score_font.render(f"score:{score}",True,(255,255,255))
         screen.blit(score_text,(10,10))
 
         pygame.display.flip()
@@ -196,4 +201,4 @@ def main():
 if __name__ == "__main__":
     main()
     #asyncio.run(main())
-
+    #asyncio.run(main())
