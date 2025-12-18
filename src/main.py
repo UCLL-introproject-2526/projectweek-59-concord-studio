@@ -56,7 +56,7 @@ async def main():
     player = Player(100, 900)
     possible_bike_positions = []
     possible_cop_positions = []
-    police = [Police(500, 900)]
+    police = []
     obstacles = [Bike(200, 900, 90, 60, color=(0, 255, 0), transparency=150, passthrough=True)]
 
     #score bored GMH
