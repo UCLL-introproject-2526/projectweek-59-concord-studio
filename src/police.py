@@ -17,6 +17,21 @@ class Police(pygame.sprite.Sprite):
         self.image_normal = pygame.image.load("../assets/images/cop_standing.png").convert_alpha()
         self.image_normal = pygame.transform.scale(self.image_normal, (76, 76))
 
+        self.running_images = [
+            pygame.transform.scale(pygame.image.load("../assets/images/cop_run_1.png").convert_alpha(), (76, 76)),
+            pygame.transform.scale(pygame.image.load("../assets/images/cop_running_2.png").convert_alpha(), (76, 76))
+        ]
+
+        self.idle_image = self.image_normal
+        self.current_frame = 0
+        self.animation_interval_ms = 450 #ms
+        self.last_animation_time = pygame.time.get_ticks()
+
+        self.idle_image = self.image_normal
+        self.current_frame = 0
+        self.animation_speed = 5  # frames per image
+
+
         self.image = self.image_normal
         #self.rect = self.image.get_rect(topleft=(x, y))
         self.speed = speed
@@ -194,6 +209,17 @@ class Police(pygame.sprite.Sprite):
                 else:
                     self._pos += move
                 self.rect.center = (int(round(self._pos.x)), int(round(self._pos.y)))
+
+        now = pygame.time.get_ticks()
+        if self.path or (Vector2(target_rect.center) - self._pos).length() > 0:
+            # Cop is moving
+            if now - self.last_animation_time >= self.animation_interval_ms:
+                self.current_frame = (self.current_frame + 1) % len(self.running_images)
+                self.last_animation_time = now
+            self.image = self.running_images[self.current_frame]
+        else:
+            # Cop is idle
+            self.image = self.idle_image
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
