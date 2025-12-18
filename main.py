@@ -68,7 +68,7 @@ async def main():
     score = 0
     pygame.font.init()
     score_font = pygame.font.SysFont("consolas", 24) 
-    scoreBored_Path = '../assets/images/instructions_score_opacity.png'
+    scoreBored_Path = 'assets/images/instructions_score_opacity.png'
     scoreBored_img = pygame.image.load(scoreBored_Path).convert_alpha()
     scoreBored_img = pygame.transform.scale(scoreBored_img,(150,150))
    
