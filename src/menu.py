@@ -95,10 +95,11 @@ def show_menu(screen, width, height):
     selected = 0
 
     running = True
+    sound = SoundManager()
+    sound.play_sound("menu_music", loops=-1) 
     while running:
         
-        sound = SoundManager()
-        sound.play_sound("menu_music") 
+        
 
         mouse_pos = pygame.mouse.get_pos()
 
@@ -113,6 +114,8 @@ def show_menu(screen, width, height):
                     for i, option in enumerate(menu_options):
                         if option["rect"].collidepoint(e.pos):
                             if option["action"] == "play":
+                                sound.stop_sound("menu_music")
+                                sound.play_sound("start_up_sfx")
                                 return
                             elif option["action"] == "credit":
                                 pass
@@ -127,6 +130,8 @@ def show_menu(screen, width, height):
                 elif e.key == pygame.K_RETURN:
                     option_to_act_on = menu_options[selected]
                     if option_to_act_on["action"] == "play":
+                        sound.stop_sound("menu_music")
+                        sound.play_sound("start_up_sfx")
                         return
                     if option_to_act_on["action"] == "credit":
                         pass

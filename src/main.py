@@ -47,7 +47,6 @@ def main():
     pygame.display.set_caption("No Lock, No Mercy")
     clock = pygame.time.Clock()
     sound = SoundManager()
-    sound.play_sound("background", volume=0.5, loops=-1)
 
 
 
@@ -152,6 +151,7 @@ def main():
                     near_water = any(obs.can_interact(player.rect) for obs in obstacles)
 
                     if picked_up_bike and near_water:
+                        sound.play_sound("bike_throw")
                         print("You threw the bike in the water.")
                         player.image = player.image_normal
                         picked_up_bike = None
@@ -181,9 +181,14 @@ def main():
         screen.fill((255, 255, 255))
 
         if picked_up_bike:
+            sound.stop_sound("background")
+            sound.play_sound("chase")
             for p in police:
                 p.set_speed(3)
                 p.update(player.get_rect())
+        else:
+            sound.stop_sound("chase")
+            sound.play_sound("background")
 
         # for obstacle in obstacles:
         #     if obstacle.collides_with(player.rect):
@@ -229,6 +234,7 @@ def main():
             for p in police:
                 p.update(player.get_rect())
                 if p.rect.colliderect(player.rect):
+                    sound.stop_sound("chase")
                     sound.play_sound("game_over") 
                     result = end_screen.show_end_screen(screen, screen_width, screen_height)
                     if result == "restart":

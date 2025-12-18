@@ -1,5 +1,6 @@
 import pygame
 import sys
+from soundmanager import SoundManager
 
 BACKGROUND_IMAGE = '../assets/images/game_over_screen.png'
 RESTART_NORMAL = '../assets/images/try_again.png'
@@ -37,7 +38,8 @@ def show_end_screen(screen, width, height):
         opt["rect"].center = (width // 2, height // 2 + Y_OFFSET)
 
     selected = 0
-    
+    sound = SoundManager()
+    sound.play_sound("menu_music") 
     while True:
         mouse_pos = pygame.mouse.get_pos()
         for event in pygame.event.get():
@@ -46,11 +48,13 @@ def show_end_screen(screen, width, height):
             
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN:
+                    sound.stop_sound("menu_music")
                     return "restart"
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     if menu_options[0]["rect"].collidepoint(event.pos):
+                        sound.stop_sound("menu_music")
                         return "restart"
 
         screen.blit(background, (0, 0))

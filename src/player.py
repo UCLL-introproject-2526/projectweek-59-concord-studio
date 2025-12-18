@@ -4,6 +4,8 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, x, y, speed=5):
         super().__init__()
 
+        self.facing_right = True
+
         # Load normal sprite
         self.image_normal = pygame.image.load("../assets/images/thief.png").convert_alpha()
         self.image_normal = pygame.transform.scale(self.image_normal, (76, 76))
@@ -45,18 +47,24 @@ class Player(pygame.sprite.Sprite):
         self.current_frame = 0
         self.last_update = 0
         self.animation_delay_normal = 300  # milliseconds between frames
+    
+    def apply_direction(self, image):
+        if not self.facing_right:
+            return pygame.transform.flip(image, True, False)
+        return image
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
 
     def update(self, keys, held_bike):
         moving = False
-
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.rect.x -= self.speed
+            self.facing_right = False
             moving = True
         if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             self.rect.x += self.speed
+            self.facing_right = True
             moving = True
         if keys[pygame.K_UP] or keys[pygame.K_w]:
             self.rect.y -= self.speed
@@ -65,34 +73,39 @@ class Player(pygame.sprite.Sprite):
             self.rect.y += self.speed
             moving = True
 
-        if keys[pygame.K_LSHIFT]:
-            self.speed = 1
-        else:
-            self.speed = 5
+        self.speed = 1 if keys[pygame.K_LSHIFT] else 5
 
         now = pygame.time.get_ticks()
-        if held_bike and moving:
-    # If holding a bike, show bike sprite
-            if now - self.last_update > self.animation_delay_holding_bike:
-                self.last_update = now
-                self.current_frame = (self.current_frame + 1) % len(self.run_with_bike)
-                self.image = self.run_with_bike[self.current_frame]
-        elif moving:
-            # Running animation
-            if now - self.last_update > self.animation_delay_normal:
-                self.last_update = now
-                self.current_frame = (self.current_frame + 1) % len(self.run_sprites)
-                self.image = self.run_sprites[self.current_frame]
+
         if self.throwing_bike:
             if now - self.last_update > self.animation_duration_throwing_bike:
                 self.last_update = now
                 self.current_frame += 1
                 if self.current_frame >= len(self.bike_throw):
-                    # Animation finished
                     self.throwing_bike = False
-                    self.image = self.image_normal
+                    self.image = self.apply_direction(self.image_normal)
                 else:
-                    self.image = self.bike_throw[self.current_frame]
+                    self.image = self.apply_direction(
+                        self.bike_throw[self.current_frame]
+                    )
+        elif held_bike and moving:
+            if now - self.last_update > self.animation_delay_holding_bike:
+                self.last_update = now
+                self.current_frame = (self.current_frame + 1) % len(self.run_with_bike)
+                self.image = self.apply_direction(
+                    self.run_with_bike[self.current_frame]
+                )
+        elif moving:
+            if now - self.last_update > self.animation_delay_normal:
+                self.last_update = now
+                self.current_frame = (self.current_frame + 1) % len(self.run_sprites)
+                self.image = self.apply_direction(
+                    self.run_sprites[self.current_frame]
+                )
+        else:
+            self.image = self.apply_direction(
+                self.image_bike if held_bike else self.image_normal
+            )
 
     def start_throw_animation(self):
         self.throwing_bike = True
