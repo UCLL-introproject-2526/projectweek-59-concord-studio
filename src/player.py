@@ -5,6 +5,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         self.facing_right = True
+        self.speed = speed
 
         # Load normal sprite
         self.image_normal = pygame.image.load("../assets/images/thief.png").convert_alpha()
@@ -52,7 +53,7 @@ class Player(pygame.sprite.Sprite):
         if not self.facing_right:
             return pygame.transform.flip(image, True, False)
         return image
-
+    
     def draw(self, surface):
         surface.blit(self.image, self.rect)
 
@@ -83,7 +84,7 @@ class Player(pygame.sprite.Sprite):
                 self.current_frame += 1
                 if self.current_frame >= len(self.bike_throw):
                     self.throwing_bike = False
-                    self.image = self.apply_direction(self.image_normal)
+                    self.image = self.apply_direction(self.image_normal if not held_bike else self.image_bike)
                 else:
                     self.image = self.apply_direction(
                         self.bike_throw[self.current_frame]
@@ -111,7 +112,7 @@ class Player(pygame.sprite.Sprite):
         self.throwing_bike = True
         self.current_frame = 0
         self.last_update = pygame.time.get_ticks()
-        self.image = self.bike_throw[0]
+        self.image = self.apply_direction(self.bike_throw[0])
 
 
     def draw(self, surface):
