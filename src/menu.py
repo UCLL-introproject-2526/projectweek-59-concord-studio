@@ -96,7 +96,7 @@ def show_menu(screen, width, height):
 
     running = True
     sound = SoundManager()
-    sound.play_sound("menu_music") 
+    sound.play_sound("menu_music", loops=-1) 
     while running:
         
         
@@ -115,6 +115,7 @@ def show_menu(screen, width, height):
                         if option["rect"].collidepoint(e.pos):
                             if option["action"] == "play":
                                 sound.stop_sound("menu_music")
+                                sound.play_sound("start_up_sfx")
                                 return
                             elif option["action"] == "credit":
                                 pass
@@ -130,6 +131,7 @@ def show_menu(screen, width, height):
                     option_to_act_on = menu_options[selected]
                     if option_to_act_on["action"] == "play":
                         sound.stop_sound("menu_music")
+                        sound.play_sound("start_up_sfx")
                         return
                     if option_to_act_on["action"] == "credit":
                         pass
