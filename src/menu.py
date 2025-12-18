@@ -1,6 +1,7 @@
 import pygame
 import sys
 from soundmanager import SoundManager
+from credits import show_credits
 
 
 BACKGROUND_IMAGE = '../assets/images/main_menu.png'
@@ -117,8 +118,8 @@ def show_menu(screen, width, height):
                                 sound.stop_sound("menu_music")
                                 sound.play_sound("start_up_sfx")
                                 return
-                            elif option["action"] == "credit":
-                                pass
+                            elif option["action"] == "credits": 
+                                show_credits(screen, width, height)
                             elif option["action"] == "quit":
                                 pygame.quit(); sys.exit()
             
@@ -133,8 +134,8 @@ def show_menu(screen, width, height):
                         sound.stop_sound("menu_music")
                         sound.play_sound("start_up_sfx")
                         return
-                    if option_to_act_on["action"] == "credit":
-                        pass
+                    if option_to_act_on["action"] == "credits": 
+                        show_credits(screen, width, height)
                     elif option_to_act_on["action"] == "quit":
                         pygame.quit(); sys.exit()
 
