@@ -15,6 +15,11 @@ import asyncio
 import math
 #import mini_map
 
+icon = pygame.image.load('assets/images/cop_run_1.png')
+bg = pygame.image.load('assets/images/background.png')
+scoreBored_Path = 'assets/images/instructions_score_opacity.png'
+hitbox_objects = Hitbox.load_map_objects('assets/images/hitbox_map.png')
+
 def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
     if bgBig and bg_rect:
         screen.blit(bgBig, bg_rect.topleft - camera.offset)
@@ -35,13 +40,11 @@ async def main():
     screen = pygame.display.set_mode((screen_width, screen_height))
     
     #top left Icon GMH
-    icon = pygame.image.load('assets/images/cop_run_1.png')
     pygame.display.set_icon(icon)
 
 
-    src.menu.show_menu(screen, screen_width, screen_height)
+    await src.menu.show_menu(screen, screen_width, screen_height)
 
-    bg = pygame.image.load('assets/images/background.png')
     bgBig = pygame.transform.scale(bg, (bg.get_size()[0] * 2, bg.get_size()[1] * 2)).convert()
     world_width, world_height = bgBig.get_size()
     print(world_width, world_height)
@@ -68,15 +71,13 @@ async def main():
     #score bored GMH
     score = 0
     pygame.font.init()
-    score_font = pygame.font.SysFont("consolas", 24) 
-    scoreBored_Path = 'assets/images/instructions_score_opacity.png'
+    score_font = pygame.font.SysFont("consolas", 24)
     scoreBored_img = pygame.image.load(scoreBored_Path).convert_alpha()
     scoreBored_img = pygame.transform.scale(scoreBored_img,(150,150))
    
 
     sprites = pygame.sprite.Group(player, *obstacles, *police, )
 
-    hitbox_objects = Hitbox.load_map_objects('assets/images/hitbox_map.png')
     print(len(hitbox_objects))
     for obj in hitbox_objects:
         if obj['type'] == 'house' or obj['type'] == 'water':
@@ -242,10 +243,10 @@ async def main():
                 p.update(player.get_rect())
                 if p.rect.colliderect(player.rect):
                     sound.stop_sound("chase")
-                    sound.play_sound("game_over") 
-                    result = src.end_screen.show_end_screen(screen, screen_width, screen_height)
+                    sound.play_sound("game_over")
+                    result = await src.end_screen.show_end_screen(screen, screen_width, screen_height)
                     if result == "restart":
-                        main()
+                        await main()
                     return
 
         

@@ -15,10 +15,15 @@ CREDITS_DATA = [
     "--- DEVELOPED BY ---",
     "Concord Studios",
     "",
+    "IMG:assets/images/cop_running_2.png" 
     "Adan",
+    "IMG:assets/images/cop_running_2.png" 
     "Aidan",
+    "IMG:assets/images/cop_running_2.png" 
     "Gavin",
+    "IMG:assets/images/cop_running_2.png" 
     "Noah",
+    "IMG:assets/images/cop_running_2.png" 
     "Vedat",
     "--- ASSETS ---",
     "Backgrounds: Artist Name",
