@@ -2,16 +2,17 @@ import pygame
 import sys
 from soundmanager import SoundManager
 from credits import show_credits
+from src.soundmanager import SoundManager
 
 
-BACKGROUND_IMAGE = '../assets/images/main_menu.png'
+BACKGROUND_IMAGE = 'assets/images/main_menu.png'
 
-PLAY_NORMAL_IMAGE = '../assets/images/play.png'
-PLAY_HOVER_IMAGE = '../assets/images/play_selected.png'
-CREDITS_NORMAL_IMAGE = '../assets/images/credits.png'
-CREDITS_HOVER_IMAGE = '../assets/images/credits_selected.png'
-QUIT_NORMAL_IMAGE = '../assets/images/quit.png'
-QUIT_HOVER_IMAGE = '../assets/images/quit_selected.png'
+PLAY_NORMAL_IMAGE = 'assets/images/play.png'
+PLAY_HOVER_IMAGE = 'assets/images/play_selected.png'
+CREDITS_NORMAL_IMAGE = 'assets/images/credits.png'
+CREDITS_HOVER_IMAGE = 'assets/images/credits_selected.png'
+QUIT_NORMAL_IMAGE = 'assets/images/quit.png'
+QUIT_HOVER_IMAGE = 'assets/images/quit_selected.png'
 
 TARGET_WIDTH = 230
 TARGET_HEIGHT = 210

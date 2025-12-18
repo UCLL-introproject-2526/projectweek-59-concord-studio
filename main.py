@@ -1,19 +1,20 @@
 import pygame
-from player import Player
-from obstacle import Obstacle
-from camera import Camera
-from hitbox import Hitbox
-from bike import Bike
+from src.player import Player
+from src.obstacle import Obstacle
+from src.camera import Camera
+from src.hitbox import Hitbox
+from src.bike import Bike
 #from menu import show_menu
-from police import Police
+from src.police import Police
 #from end_screen import show_end_screen
-from soundmanager import SoundManager
+from src.soundmanager import SoundManager
 import random
-import menu
-import end_screen
+import src.menu
+import src.end_screen
 import asyncio
 import math
 #import mini_map
+
 
 def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
     if bgBig and bg_rect:
@@ -25,7 +26,9 @@ def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
             sprite.rect.topleft - camera.offset
         )
 
-def main():
+async def main():
+    print("main BOOT OK")
+    pygame.init()
     pygame.init()
 
     screen_width = 800
@@ -33,13 +36,13 @@ def main():
     screen = pygame.display.set_mode((screen_width, screen_height))
     
     #top left Icon GMH
-    icon = pygame.image.load('../assets/images/cop_run_1.png')
+    icon = pygame.image.load('assets/images/cop_run_1.png')
     pygame.display.set_icon(icon)
 
 
-    menu.show_menu(screen, screen_width, screen_height)
+    src.menu.show_menu(screen, screen_width, screen_height)
 
-    bg = pygame.image.load('../assets/images/background.png')
+    bg = pygame.image.load('assets/images/background.png')
     bgBig = pygame.transform.scale(bg, (bg.get_size()[0] * 2, bg.get_size()[1] * 2)).convert()
     world_width, world_height = bgBig.get_size()
     print(world_width, world_height)
@@ -66,11 +69,15 @@ def main():
     #score bored GMH
     score = 0
     pygame.font.init()
-    score_font = pygame.font.SysFont("consolas", 36)  
+    score_font = pygame.font.SysFont("consolas", 24) 
+    scoreBored_Path = 'assets/images/instructions_score_opacity.png'
+    scoreBored_img = pygame.image.load(scoreBored_Path).convert_alpha()
+    scoreBored_img = pygame.transform.scale(scoreBored_img,(150,150))
+   
 
     sprites = pygame.sprite.Group(player, *obstacles, *police, )
 
-    hitbox_objects = Hitbox.load_map_objects('../assets/images/hitbox_map.png')
+    hitbox_objects = Hitbox.load_map_objects('assets/images/hitbox_map.png')
     print(len(hitbox_objects))
     for obj in hitbox_objects:
         if obj['type'] == 'house' or obj['type'] == 'water':
@@ -90,7 +97,7 @@ def main():
         elif obj['type'] == 'cop':
             possible_cop_positions.append((obj['rect'].x, obj['rect'].y))
     print("cop len: ", len(possible_cop_positions))
-
+    
     amount_of_bikes = 30
     bike_positions = random.sample(possible_bike_positions, min(amount_of_bikes, len(possible_bike_positions)))
     for pos in bike_positions:
@@ -237,7 +244,7 @@ def main():
                 if p.rect.colliderect(player.rect):
                     sound.stop_sound("chase")
                     sound.play_sound("game_over") 
-                    result = end_screen.show_end_screen(screen, screen_width, screen_height)
+                    result = src.end_screen.show_end_screen(screen, screen_width, screen_height)
                     if result == "restart":
                         main()
                     return
@@ -250,18 +257,19 @@ def main():
 
         draw(screen, camera, sprites, bgBig, bgBig.get_rect())
         #draw score gmh
-        score_text = score_font.render(f"SCORE:{score}",True,(255,255,255))
-        screen.blit(score_text,(10,10))
+        score_text = score_font.render(f"    {score}",True,(255,255,255))
+        screen.blit(score_text,(50,20))
+        screen.blit(scoreBored_img,(10,10))
 
         pygame.display.flip()
         clock.tick(60)
-        #await asyncio.sleep(0)
+        await asyncio.sleep(0)
 
     pygame.quit()
 
 if __name__ == "__main__":
-    main()
-    #asyncio.run(main())
+    #main()
+    asyncio.run(main())
     #asyncio.run(main())
 
     

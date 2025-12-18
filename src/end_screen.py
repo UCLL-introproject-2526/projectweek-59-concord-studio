@@ -1,10 +1,10 @@
 import pygame
 import sys
-from soundmanager import SoundManager
+from src.soundmanager import SoundManager
 
-BACKGROUND_IMAGE = '../assets/images/game_over_screen.png'
-RESTART_NORMAL = '../assets/images/try_again.png'
-RESTART_HOVER = '../assets/images/try_again_selected.png'
+BACKGROUND_IMAGE = 'assets/images/game_over_screen.png'
+RESTART_NORMAL = 'assets/images/try_again.png'
+RESTART_HOVER = 'assets/images/try_again_selected.png'
 
 TARGET_WIDTH = 200
 TARGET_HEIGHT = 180
