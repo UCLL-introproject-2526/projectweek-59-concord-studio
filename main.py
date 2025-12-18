@@ -18,8 +18,6 @@ import math
 icon = pygame.image.load('assets/images/cop_run_1.png')
 bg = pygame.image.load('assets/images/background.png')
 scoreBored_Path = 'assets/images/instructions_score_opacity.png'
-hitbox_objects = Hitbox.load_map_objects('assets/images/hitbox_map.png')
-
 def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
     if bgBig and bg_rect:
         screen.blit(bgBig, bg_rect.topleft - camera.offset)
@@ -77,6 +75,7 @@ async def main():
    
 
     sprites = pygame.sprite.Group(player, *obstacles, *police, )
+    hitbox_objects = Hitbox.load_map_objects('assets/images/hitbox_map.png')
 
     print(len(hitbox_objects))
     for obj in hitbox_objects:

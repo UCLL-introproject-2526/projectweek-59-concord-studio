@@ -9,7 +9,8 @@ class SoundManager:
             "background": pygame.mixer.Sound("assets/sfx/ingame ambient music.wav"), #added
             "start_up_sfx": pygame.mixer.Sound("assets/sfx/game start up.wav"),
             "menu_music": pygame.mixer.Sound("assets/sfx/menu music.wav"), #added
-            "game_over": pygame.mixer.Sound("assets/sfx/game over.wav") #added
+            "game_over": pygame.mixer.Sound("assets/sfx/game over.wav"), #added
+            "credits": pygame.mixer.Sound("assets/sfx/credits.mp3")
 
         }
 
