@@ -1,5 +1,5 @@
 import pygame
-from src.hitbox import Hitbox
+from hitbox import Hitbox
 import heapq
 from pygame.math import Vector2
 
@@ -14,12 +14,12 @@ class Police(pygame.sprite.Sprite):
         self._pos = Vector2(self.rect.center)
         self.speed = speed
 
-        self.image_normal = pygame.image.load("assets/images/cop_standing.png").convert_alpha()
+        self.image_normal = pygame.image.load("../assets/images/cop_standing.png").convert_alpha()
         self.image_normal = pygame.transform.scale(self.image_normal, (76, 76))
 
         self.running_images = [
-            pygame.transform.scale(pygame.image.load("assets/images/cop_run_1.png").convert_alpha(), (76, 76)),
-            pygame.transform.scale(pygame.image.load("assets/images/cop_running_2.png").convert_alpha(), (76, 76))
+            pygame.transform.scale(pygame.image.load("../assets/images/cop_run_1.png").convert_alpha(), (76, 76)),
+            pygame.transform.scale(pygame.image.load("../assets/images/cop_running_2.png").convert_alpha(), (76, 76))
         ]
 
         self.idle_image = self.image_normal
@@ -45,7 +45,7 @@ class Police(pygame.sprite.Sprite):
         self.blocked = set()
 
         try:
-            map_image = pygame.image.load('assets/images/hitbox_map.png').convert()
+            map_image = pygame.image.load('../assets/images/hitbox_map.png').convert()
             map_w, map_h = map_image.get_size()
             self.cols = map_w // Hitbox.TILE_SIZE
             self.rows = map_h // Hitbox.TILE_SIZE
@@ -177,6 +177,8 @@ class Police(pygame.sprite.Sprite):
         if (self._frame_counter % self.recalc_every) == 0 or not self.path:
             self._rebuild_path(target_rect, go_to_spawn=go_to_spawn)
 
+        moving = False
+
         if self.path:
             if self.path_index < len(self.path):
                 waypoint = Vector2(self.path[self.path_index])
@@ -189,10 +191,9 @@ class Police(pygame.sprite.Sprite):
                     self._pos = Vector2(waypoint)
                     self.path_index += 1
                 else:
-
                     movement = delta.normalize() * self.speed
                     self._pos += movement
-
+                    moving = True
                 self.rect.center = (int(round(self._pos.x)), int(round(self._pos.y)))
             else:
                 self.path = []
@@ -208,18 +209,24 @@ class Police(pygame.sprite.Sprite):
                     self._pos = Vector2(target_center)
                 else:
                     self._pos += move
+                    moving = True
                 self.rect.center = (int(round(self._pos.x)), int(round(self._pos.y)))
 
         now = pygame.time.get_ticks()
-        if self.path or (Vector2(target_rect.center) - self._pos).length() > 0:
-            # Cop is moving
+
+        # Determine if the cop is moving
+        moving = self.path or (Vector2(target_rect.center) - self._pos).length() > 0.1
+
+        if moving:
+            # Animate running
             if now - self.last_animation_time >= self.animation_interval_ms:
                 self.current_frame = (self.current_frame + 1) % len(self.running_images)
                 self.last_animation_time = now
             self.image = self.running_images[self.current_frame]
         else:
-            # Cop is idle
+            # Revert to standing image
             self.image = self.idle_image
+            self.current_frame = 0
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
