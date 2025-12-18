@@ -1,7 +1,7 @@
 import pygame
 import sys
 from src.soundmanager import SoundManager
-
+import asyncio
 
 BACKGROUND_IMAGE = 'assets/images/main_menu.png'
 
@@ -18,7 +18,7 @@ COLLISION_SHRINK_Y = 70
 VERTICAL_GAP = 70
 Y_OFFSET = 160
 
-def show_menu(screen, width, height):
+async def show_menu(screen, width, height):
     pygame.font.init() 
 
     try:
@@ -158,6 +158,7 @@ def show_menu(screen, width, height):
                 screen.blit(option["normal_img"], (draw_x, draw_y))
         
         pygame.display.flip()
+        await asyncio.sleep(0)
 
 
 
