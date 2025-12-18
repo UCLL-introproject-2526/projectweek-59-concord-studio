@@ -29,7 +29,8 @@ def main():
     screen_width = 800
     screen_height = 600
     screen = pygame.display.set_mode((screen_width, screen_height))
-     #top left Icon GMH
+    
+    #top left Icon GMH
     icon = pygame.image.load('../assets/images/cop_run_1.png')
     pygame.display.set_icon(icon)
 
@@ -40,9 +41,6 @@ def main():
     bgBig = pygame.transform.scale(bg, (bg.get_size()[0] * 2, bg.get_size()[1] * 2)).convert()
     world_width, world_height = bgBig.get_size()
     print(world_width, world_height)
-
-
-   
 
 
     pygame.display.set_caption("No Lock, No Mercy")
@@ -183,7 +181,7 @@ def main():
                         main()
                     return
 
-
+        
 
         # player out of bounds
         if player.rect.left < 0 or player.rect.right > world_width or player.rect.top < 0 or player.rect.bottom > world_height:
