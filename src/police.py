@@ -4,13 +4,13 @@ import heapq
 from pygame.math import Vector2
 
 class Police(pygame.sprite.Sprite):
-    def __init__(self, x, y, hitbox_map, speed=3):
+    def __init__(self, x, y, hitbox_map, speed=3, spawn_pos = None):
         super().__init__()
         self.image = pygame.Surface((50, 50))
         self.image.fill((255, 255, 0))
         self.image.set_alpha(190)
         self.rect = self.image.get_rect(topleft=(x, y))
-        # keep a float-precision center position to avoid integer rounding jitter
+
         self._pos = Vector2(self.rect.center)
         self.speed = speed
 
@@ -20,20 +20,21 @@ class Police(pygame.sprite.Sprite):
         self.image = self.image_normal
         #self.rect = self.image.get_rect(topleft=(x, y))
         self.speed = speed
+        if spawn_pos:
+            self.spawn_pos = spawn_pos
+        else:
+            self.spawn_pos = (x, y)
 
-        # Pathfinding setup
         self.node_size = Hitbox.TILE_SIZE * Hitbox.SCALE_FACTOR
-        # load hitbox objects and build blocked set as grid coordinates
         map_objects = hitbox_map
         self.blocked = set()
-        # determine grid size from the hitbox image
+
         try:
             map_image = pygame.image.load('../assets/images/hitbox_map.png').convert()
             map_w, map_h = map_image.get_size()
             self.cols = map_w // Hitbox.TILE_SIZE
             self.rows = map_h // Hitbox.TILE_SIZE
         except Exception:
-            # fallback to something reasonable
             self.cols = 100
             self.rows = 100
 
@@ -42,9 +43,9 @@ class Police(pygame.sprite.Sprite):
             cy = obj['rect'].y // self.node_size
             self.blocked.add((cx, cy))
 
-        self.path = []  # list of pixel centers to follow
+        self.path = []
         self.path_index = 0
-        self.recalc_every = 20  # frames between forced recalcs
+        self.recalc_every = 20
         self._frame_counter = 0
         self.reached_target_threshold = 8
 
@@ -66,11 +67,9 @@ class Police(pygame.sprite.Sprite):
                 yield (nx, ny)
 
     def _heuristic(self, a, b):
-        # Manhattan distance
         return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
     def _astar(self, start, goal):
-        # start/goal are grid positions (gx, gy)
         if start == goal:
             return [start]
         open_set = []
@@ -103,7 +102,6 @@ class Police(pygame.sprite.Sprite):
         return None  # no path
 
     def _find_nearest_unblocked(self, pos, max_radius=10):
-        """If pos is blocked, search outward (BFS) up to max_radius tiles for a free cell."""
         if pos not in self.blocked:
             return pos
         from collections import deque
@@ -124,10 +122,14 @@ class Police(pygame.sprite.Sprite):
             radius += 1
         return None
 
-    def _rebuild_path(self, target_rect):
+    def _rebuild_path(self, target_rect, go_to_spawn=False):
         start = self._grid_pos(self.rect.center)
-        goal = self._grid_pos(target_rect.center)
-        # clamp goal inside grid
+
+        if go_to_spawn:
+            goal = self._grid_pos((self.spawn_pos[0] + 25, self.spawn_pos[1] + 25))
+        else:
+            goal = self._grid_pos(target_rect.center)
+
         gx = max(0, min(self.cols - 1, goal[0]))
         gy = max(0, min(self.rows - 1, goal[1]))
         goal = (gx, gy)
@@ -137,68 +139,56 @@ class Police(pygame.sprite.Sprite):
             self.path_index = 0
             return
 
-        # if goal cell is blocked, try to find nearest free cell
         if goal in self.blocked:
             new_goal = self._find_nearest_unblocked(goal, max_radius=20)
             if new_goal:
                 goal = new_goal
             else:
-                # can't reach a nearby free cell
                 self.path = []
                 self.path_index = 0
                 return
 
         raw_path = self._astar(start, goal)
         if raw_path:
-            # convert to pixel centers
             self.path = [self._pixel_center(n) for n in raw_path]
             self.path_index = 0
         else:
             self.path = []
             self.path_index = 0
 
-    def update(self, target_rect):
-        """
-        Move toward the target using a generated path. This keeps the same signature
-        so `main.py` doesn't need changes.
-        """
+    def update(self, target_rect, go_to_spawn=False):
         self._frame_counter += 1
-        # Rebuild path periodically or if path empty or target grid changed
-        if (self._frame_counter % self.recalc_every) == 0 or not self.path:
-            self._rebuild_path(target_rect)
 
-        # If we have a path, follow it
+        if (self._frame_counter % self.recalc_every) == 0 or not self.path:
+            self._rebuild_path(target_rect, go_to_spawn=go_to_spawn)
+
         if self.path:
-            # advance path_index if close to current waypoint
             if self.path_index < len(self.path):
                 waypoint = Vector2(self.path[self.path_index])
-                # compute vector from current float center to waypoint
+
                 delta = waypoint - self._pos
                 dist = delta.length()
-                # if we're very close to the waypoint, snap to it and advance the index
+
                 threshold = float(max(self.reached_target_threshold, self.speed))
                 if dist <= threshold:
                     self._pos = Vector2(waypoint)
                     self.path_index += 1
                 else:
-                    # move towards waypoint using float position to avoid rounding jitter
+
                     movement = delta.normalize() * self.speed
                     self._pos += movement
-                # sync rect center to the float position
+
                 self.rect.center = (int(round(self._pos.x)), int(round(self._pos.y)))
             else:
-                # reached end of path
                 self.path = []
                 self.path_index = 0
         else:
-            # fallback: direct movement (old behavior)
-            # use float position for fallback as well to reduce jitter
             epsilon = 5
             target_center = Vector2(target_rect.center)
             delta = target_center - self._pos
             if delta.length() > epsilon:
                 move = delta.normalize() * self.speed
-                # if very close, snap instead of overshooting
+
                 if delta.length() <= self.speed:
                     self._pos = Vector2(target_center)
                 else:
@@ -213,5 +203,7 @@ class Police(pygame.sprite.Sprite):
 
     def set_position(self, position):
         self.rect.topleft = position
-        # keep float center position in sync
         self._pos = Vector2(self.rect.center)
+
+    def set_speed(self, speed):
+        self.speed = speed
