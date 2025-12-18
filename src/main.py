@@ -47,7 +47,6 @@ def main():
     pygame.display.set_caption("No Lock, No Mercy")
     clock = pygame.time.Clock()
     sound = SoundManager()
-    sound.play_sound("background", volume=0.5, loops=-1)
 
 
 
