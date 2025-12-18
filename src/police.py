@@ -14,15 +14,34 @@ class Police(pygame.sprite.Sprite):
         self._pos = Vector2(self.rect.center)
         self.speed = speed
 
-        self.image_normal = pygame.image.load("assets/images/cop_standing.png").convert_alpha()
+        self.facing = "right"
+
+        self.image_normal = pygame.image.load(
+            "assets/images/cop_standing.png"
+        ).convert_alpha()
         self.image_normal = pygame.transform.scale(self.image_normal, (76, 76))
 
-        self.running_images = [
-            pygame.transform.scale(pygame.image.load("assets/images/cop_run_1.png").convert_alpha(), (76, 76)),
-            pygame.transform.scale(pygame.image.load("assets/images/cop_running_2.png").convert_alpha(), (76, 76))
+        base_run_images = [
+            pygame.transform.scale(
+                pygame.image.load("assets/images/cop_run_1.png").convert_alpha(),
+                (76, 76)
+            ),
+            pygame.transform.scale(
+                pygame.image.load("assets/images/cop_running_2.png").convert_alpha(),
+                (76, 76)
+            )
         ]
 
-        self.idle_image = self.image_normal
+        self.idle_images = {
+            "right": self.image_normal,
+            "left": pygame.transform.flip(self.image_normal, True, False)
+        }
+
+        self.running_images = {
+            "right": base_run_images,
+            "left": [pygame.transform.flip(img, True, False) for img in base_run_images]
+        }
+
         self.current_frame = 0
         self.animation_interval_ms = 525 #ms
         self.last_animation_time = pygame.time.get_ticks()
@@ -179,9 +198,13 @@ class Police(pygame.sprite.Sprite):
         if self.path:
             if self.path_index < len(self.path):
                 waypoint = Vector2(self.path[self.path_index])
-
                 delta = waypoint - self._pos
                 dist = delta.length()
+
+                if delta.x > 0:
+                    self.facing = "right"
+                elif delta.x < 0:
+                    self.facing = "left"
 
                 threshold = float(max(self.reached_target_threshold, self.speed))
                 if dist <= threshold:
@@ -214,7 +237,10 @@ class Police(pygame.sprite.Sprite):
             if now - self.last_animation_time >= self.animation_interval_ms:
                 self.current_frame = (self.current_frame + 1) % len(self.running_images)
                 self.last_animation_time = now
-            self.image = self.running_images[self.current_frame]
+        if self.path:
+            self.image = self.running_images[self.facing][self.current_frame]
+        else:
+            self.image = self.idle_images[self.facing]
 
     def idle(self):
         self.image = self.idle_image
