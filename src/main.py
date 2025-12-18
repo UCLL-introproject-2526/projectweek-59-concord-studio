@@ -23,12 +23,16 @@ def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
             sprite.rect.topleft - camera.offset
         )
 
-async def main():
+def main():
     pygame.init()
 
     screen_width = 800
     screen_height = 600
     screen = pygame.display.set_mode((screen_width, screen_height))
+     #top left Icon GMH
+    icon = pygame.image.load('../assets/images/cop_run_1.png')
+    pygame.display.set_icon(icon)
+
 
     menu.show_menu(screen, screen_width, screen_height)
 
@@ -37,14 +41,15 @@ async def main():
     world_width, world_height = bgBig.get_size()
     print(world_width, world_height)
 
+
+   
+
+
     pygame.display.set_caption("No Lock, No Mercy")
     clock = pygame.time.Clock()
     sound = SoundManager()
     sound.play_sound("background", volume=0.5, loops=-1)
 
-    #top left Icon GMH
-    icon = pygame.image.load('../assets/images/cop_run_1.png')
-    pygame.display.set_icon(icon)
 
 
 
@@ -62,7 +67,7 @@ async def main():
     #score bored GMH
     score = 0
     pygame.font.init()
-    score_font = pygame.font.SysFont(None, 36)  # default font, size 36
+    score_font = pygame.font.SysFont("consolas", 36)  
 
     sprites = pygame.sprite.Group(player, *obstacles, *police, )
 
@@ -76,6 +81,7 @@ async def main():
                 obj['rect'].width,
                 obj['rect'].height,
                 obstacle_type=obj['type'],
+                transparency=0,
                 passthrough=False
             )
             obstacles.append(obstacle)
@@ -106,6 +112,7 @@ async def main():
     # print(f"Loaded {len(hitbox_objects)} hitbox objects from map.")
     # print(hitbox_objects)
     while running:
+        #sound.play_sound("start_up_sfx")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -121,7 +128,7 @@ async def main():
                         print("You threw the bike in the water.")
                         player.image = player.image_normal
                         picked_up_bike = None
-                        score += 1
+                        score += 100
                     elif colliding_Bike and not picked_up_bike:
                         picked_up_bike = colliding_Bike
                         sprites.remove(colliding_Bike)
@@ -183,16 +190,16 @@ async def main():
 
         draw(screen, camera, sprites, bgBig, bgBig.get_rect())
         #draw score gmh
-        score_text = score_font.render(f"score:{score}",True,(0,0,0))
+        score_text = score_font.render(f"score:{score}",True,(255,255,255))
         screen.blit(score_text,(10,10))
 
         pygame.display.flip()
         clock.tick(60)
-        await asyncio.sleep(0)
+        #await asyncio.sleep(0)
 
     pygame.quit()
 
 if __name__ == "__main__":
-    #main()
-    asyncio.run(main())
-
+    main()
+    #asyncio.run(main())
+    #asyncio.run(main())
