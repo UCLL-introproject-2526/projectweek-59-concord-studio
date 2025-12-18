@@ -13,22 +13,24 @@ import src.menu
 import src.end_screen
 import asyncio
 import math
-#import mini_map
+import src.mini_map
 
-icon = pygame.image.load('assets/images/cop_run_1.png')
-bg = pygame.image.load('assets/images/background.png')
-scoreBored_Path = 'assets/images/instructions_score_opacity.png'
-def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
-    if bgBig and bg_rect:
-        screen.blit(bgBig, bg_rect.topleft - camera.offset)
 
-    for sprite in sprites:
-        screen.blit(
-            sprite.image,
-            sprite.rect.topleft - camera.offset
-        )
 
 async def main():
+    icon = pygame.image.load('assets/images/cop_run_1.png')
+    bg = pygame.image.load('assets/images/background.png')
+    scoreBored_Path = 'assets/images/instructions_score_opacity.png'
+
+    def draw(screen, camera, sprites, bgBig=None, bg_rect=None):
+        if bgBig and bg_rect:
+            screen.blit(bgBig, bg_rect.topleft - camera.offset)
+
+        for sprite in sprites:
+            screen.blit(
+                sprite.image,
+                sprite.rect.topleft - camera.offset
+            )
     print("main BOOT OK")
     pygame.init()
     pygame.init()
@@ -47,7 +49,10 @@ async def main():
     world_width, world_height = bgBig.get_size()
     print(world_width, world_height)
 
+    #mini_map
 
+    minimap_surface,minimap_pos,SCALE_X,SCALE_Y = src.mini_map.create_minimap(world_width,world_height,screen_width)
+    
     pygame.display.set_caption("No Lock, No Mercy")
     clock = pygame.time.Clock()
     sound = SoundManager()
@@ -96,7 +101,7 @@ async def main():
         elif obj['type'] == 'cop':
             possible_cop_positions.append((obj['rect'].x, obj['rect'].y))
     print("cop len: ", len(possible_cop_positions))
-    
+
     amount_of_bikes = 30
     bike_positions = random.sample(possible_bike_positions, min(amount_of_bikes, len(possible_bike_positions)))
     for pos in bike_positions:
@@ -128,7 +133,7 @@ async def main():
                 if dist < min_distance_between_cops:
                     is_far_enough = False
                     break
-            
+
             if is_far_enough:
                 selected_cops_positions.append(pos)
 
@@ -247,14 +252,35 @@ async def main():
                     if result == "restart":
                         await main()
                     return
+        else:
+            for p in police:
+                p.idle()
 
-        
+        # mini_map
+        draw(screen, camera, sprites, bgBig, bgBig.get_rect())
+
+        # draw score UI
+        score_text = score_font.render(f"    {score}", True, (255, 255, 255))
+        screen.blit(score_text, (50, 20))
+        screen.blit(scoreBored_img, (10, 10))
+         # draw minimap on top
+        src.mini_map.draw_minimap(
+            minimap_surface,
+            minimap_pos,
+            SCALE_X,
+            SCALE_Y,
+            screen,
+            player,
+            obstacles,
+            police,
+            camera
+        )
 
         # player out of bounds
         if player.rect.left < 0 or player.rect.right > world_width or player.rect.top < 0 or player.rect.bottom > world_height:
             player.set_position(old_pos_player)
 
-        draw(screen, camera, sprites, bgBig, bgBig.get_rect())
+       
         #draw score gmh
         score_text = score_font.render(f"    {score}",True,(255,255,255))
         screen.blit(score_text,(50,20))
@@ -266,9 +292,9 @@ async def main():
 
     pygame.quit()
 
-if __name__ == "__main__":
+
     #main()
-    asyncio.run(main())
+asyncio.run(main())
     #asyncio.run(main())
 
     
