@@ -10,7 +10,7 @@ class Player(pygame.sprite.Sprite):
 
         # Load bike sprite
         self.image_bike = pygame.image.load("../assets/images/bike_hold.png").convert_alpha()
-        self.image_bike = pygame.transform.scale(self.image_bike, (90, 90))
+        self.image_bike = pygame.transform.scale(self.image_bike, (100, 100))
 
         # Load running animation sprites
         self.run_sprites = [
@@ -23,17 +23,18 @@ class Player(pygame.sprite.Sprite):
         self.animation_delay_holding_bike = 500
 
         self.run_with_bike = [
-            pygame.transform.scale(pygame.image.load("../assets/images/bike_hold_run_1.png").convert_alpha(), (90, 90)),
-            pygame.transform.scale(pygame.image.load("../assets/images/bike_hold_run_2.png").convert_alpha(), (90, 90))
+            pygame.transform.scale(pygame.image.load("../assets/images/bike_hold_run_1.png").convert_alpha(), (100, 100)),
+            pygame.transform.scale(pygame.image.load("../assets/images/bike_hold_run_2.png").convert_alpha(), (100, 100))
         ]
 
-        #VERY IMPORTANT!!! DON'T DELETE CODE BELOW!!!
+        self.bike_throw = [
+            pygame.transform.scale(pygame.image.load(f"../assets/images/bike_throw.png").convert_alpha(),(135, 90))
+        ]
 
-        # self.current_frame = 0
-        # self.last_update = 0
-        # self.animation_duration_throwing_bike = 200
-
-        # self.bike_throw = pygame.transform.scale(pygame.image.load("../assets/bike_throw.png").convert_alpha(), (90, 90))
+        self.throwing_bike = False
+        self.current_frame = 0
+        self.last_update = 0
+        self.animation_duration_throwing_bike = 300  # ms
 
         # Current image and rect
         self.image = self.image_normal
@@ -44,12 +45,6 @@ class Player(pygame.sprite.Sprite):
         self.current_frame = 0
         self.last_update = 0
         self.animation_delay_normal = 300  # milliseconds between frames
-
-
-
-        # thief_size = pygame.transform.scale(self.image, (self.image.get_size()[0] * 1, self.image.get_size()[1] * 1)).convert()
-        # self.image = thief_size.convert_alpha()
-        # self.rect = self.image.get_rect(topleft=(x, y))
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
@@ -88,12 +83,22 @@ class Player(pygame.sprite.Sprite):
                 self.last_update = now
                 self.current_frame = (self.current_frame + 1) % len(self.run_sprites)
                 self.image = self.run_sprites[self.current_frame]
-        # elif throwing:
-        #     # Running animation
-        #     if now - self.last_update > self.animation_duration_throwing_bike:
-        #         self.last_update = now
-        #         self.current_frame = (self.current_frame + 1) % len(self.bike_throw)
-        #         self.image = self.bike_throw[self.current_frame]
+        if self.throwing_bike:
+            if now - self.last_update > self.animation_duration_throwing_bike:
+                self.last_update = now
+                self.current_frame += 1
+                if self.current_frame >= len(self.bike_throw):
+                    # Animation finished
+                    self.throwing_bike = False
+                    self.image = self.image_normal
+                else:
+                    self.image = self.bike_throw[self.current_frame]
+
+    def start_throw_animation(self):
+        self.throwing_bike = True
+        self.current_frame = 0
+        self.last_update = pygame.time.get_ticks()
+        self.image = self.bike_throw[0]
 
 
     def draw(self, surface):

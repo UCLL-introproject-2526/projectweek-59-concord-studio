@@ -130,6 +130,7 @@ def main():
                         player.image = player.image_normal
                         picked_up_bike = None
                         score += 100
+                        player.start_throw_animation()
                     elif colliding_Bike and not picked_up_bike:
                         picked_up_bike = colliding_Bike
                         sprites.remove(colliding_Bike)
@@ -202,3 +203,5 @@ if __name__ == "__main__":
     main()
     #asyncio.run(main())
     #asyncio.run(main())
+
+    
