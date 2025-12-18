@@ -4,12 +4,12 @@ class SoundManager:
     def __init__(self):
         pygame.mixer.init(frequency=22050, size=-16, channels=4, buffer=4096)
         self.sounds = {
-            "chase": pygame.mixer.Sound("../assets/sfx/audio cop chase.wav"),
-            "bike_throw": pygame.mixer.Sound("../assets/sfx/bike throw.wav"),
-            "background": pygame.mixer.Sound("../assets/sfx/ingame ambient music.wav"), #added
-            "start_up_sfx": pygame.mixer.Sound("../assets/sfx/game start up.wav"),
-            "menu_music": pygame.mixer.Sound("../assets/sfx/menu music.wav"), #added
-            "game_over": pygame.mixer.Sound("../assets/sfx/game over.wav") #added
+            "chase": pygame.mixer.Sound("assets/sfx/audio cop chase.wav"),
+            "bike_throw": pygame.mixer.Sound("assets/sfx/bike throw.wav"),
+            "background": pygame.mixer.Sound("assets/sfx/ingame ambient music.wav"), #added
+            "start_up_sfx": pygame.mixer.Sound("assets/sfx/game start up.wav"),
+            "menu_music": pygame.mixer.Sound("assets/sfx/menu music.wav"), #added
+            "game_over": pygame.mixer.Sound("assets/sfx/game over.wav") #added
 
         }
 

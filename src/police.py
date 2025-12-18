@@ -1,5 +1,5 @@
 import pygame
-from hitbox import Hitbox
+from src.hitbox import Hitbox
 import heapq
 from pygame.math import Vector2
 
@@ -14,12 +14,12 @@ class Police(pygame.sprite.Sprite):
         self._pos = Vector2(self.rect.center)
         self.speed = speed
 
-        self.image_normal = pygame.image.load("../assets/images/cop_standing.png").convert_alpha()
+        self.image_normal = pygame.image.load("assets/images/cop_standing.png").convert_alpha()
         self.image_normal = pygame.transform.scale(self.image_normal, (76, 76))
 
         self.running_images = [
-            pygame.transform.scale(pygame.image.load("../assets/images/cop_run_1.png").convert_alpha(), (76, 76)),
-            pygame.transform.scale(pygame.image.load("../assets/images/cop_running_2.png").convert_alpha(), (76, 76))
+            pygame.transform.scale(pygame.image.load("assets/images/cop_run_1.png").convert_alpha(), (76, 76)),
+            pygame.transform.scale(pygame.image.load("assets/images/cop_running_2.png").convert_alpha(), (76, 76))
         ]
 
         self.idle_image = self.image_normal
@@ -45,7 +45,7 @@ class Police(pygame.sprite.Sprite):
         self.blocked = set()
 
         try:
-            map_image = pygame.image.load('../assets/images/hitbox_map.png').convert()
+            map_image = pygame.image.load('assets/images/hitbox_map.png').convert()
             map_w, map_h = map_image.get_size()
             self.cols = map_w // Hitbox.TILE_SIZE
             self.rows = map_h // Hitbox.TILE_SIZE
