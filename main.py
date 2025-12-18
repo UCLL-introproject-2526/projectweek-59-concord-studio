@@ -15,7 +15,6 @@ import asyncio
 import math
 #import mini_map
 
-
 def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
     if bgBig and bg_rect:
         screen.blit(bgBig, bg_rect.topleft - camera.offset)

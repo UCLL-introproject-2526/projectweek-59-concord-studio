@@ -1,7 +1,6 @@
 import pygame
 import sys
-from soundmanager import SoundManager
-from credits import show_credits
+from src.credits import show_credits
 from src.soundmanager import SoundManager
 
 

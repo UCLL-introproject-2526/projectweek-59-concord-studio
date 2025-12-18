@@ -9,17 +9,24 @@ LINE_SPACING = 40
 IMAGE_WIDTH = 150 
 
 CREDITS_DATA = [
-    "NO LOCK, NO MERCY",
-    "",
-    "IMG:../asset/images/cop_running_2.png", 
+    "IMG:assets/images/LogoName.png",
+    "IMG:assets/images/cop_running_2.png" 
     "",
     "--- DEVELOPED BY ---",
     "Concord Studios",
     "",
+    "Adan",
+    "Aidan",
+    "Gavin",
+    "Noah",
+    "Vedat",
     "--- ASSETS ---",
     "Backgrounds: Artist Name",
-    "Sprites: Artist Name",
-    "IMG:../assets/bike_throw.png", 
+    "--- SPRITES ---",
+    "Charles George Peter Twinnings",
+    "Geminaia Goggings",
+
+    "IMG:assets/images/", 
     "",
     "--- SPECIAL THANKS ---",
     "..........",
@@ -30,7 +37,7 @@ CREDITS_DATA = [
 def show_credits(screen, width, height):
     clock = pygame.time.Clock()
     
-    font_path = "assets/fonts/my_custom_font.ttf" 
+    font_path = "assets/Perfect_DOS_VGA_437.ttf" 
     
     try:
         font = pygame.font.Font(font_path, 36)
