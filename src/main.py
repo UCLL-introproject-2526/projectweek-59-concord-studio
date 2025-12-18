@@ -187,7 +187,7 @@ def main():
 
         draw(screen, camera, sprites, bgBig, bgBig.get_rect())
         #draw score gmh
-        score_text = score_font.render(f"score:{score}",True,(255,255,255))
+        score_text = score_font.render(f"SCORE:{score}",True,(255,255,255))
         screen.blit(score_text,(10,10))
 
         pygame.display.flip()
