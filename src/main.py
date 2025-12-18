@@ -12,6 +12,7 @@ import random
 import menu
 import end_screen
 import asyncio
+import math
 
 def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
     if bgBig and bg_rect:
@@ -59,7 +60,6 @@ def main():
     player = Player(100, 900)
     possible_bike_positions = []
     possible_cop_positions = []
-    obstacles = [] 
     police = []
     obstacles = [Bike(200, 900, 90, 60, color=(0, 255, 0), transparency=150, passthrough=True)]
 
@@ -99,14 +99,42 @@ def main():
         sprites.add(bike)
         print(pos)
 
-    amount_of_cops = 5 
+    amount_of_cops = 10
+    min_distance_between_cops = 400
+
+    selected_cops_positions = []
+
     if possible_cop_positions:
+
+        random.shuffle(possible_cop_positions)
+        # cop_positions = random.sample(possible_cop_positions, min(amount_of_cops, len(possible_cop_positions)))
+        for pos in possible_cop_positions:
+            # new_cop = Police(pos[0], pos[1], hitbox_objects)
+            # police.append(new_cop)
+            # print("police:", pos)
+            if len(selected_cops_positions) >= amount_of_cops:
+                break
+
+            is_far_enough = True
+            for selected_pos in selected_cops_positions:
+                dist = math.hypot(pos[0] - selected_pos[0], pos[1] - selected_pos[1])
+
+                if dist < min_distance_between_cops:
+                    is_far_enough = False
+                    break
+            
+            if is_far_enough:
+                selected_cops_positions.append(pos)
+
+        for pos in selected_cops_positions:
+            new_cop = Police(pos[0], pos[1], hitbox_objects)
         cop_positions = random.sample(possible_cop_positions, min(amount_of_cops, len(possible_cop_positions)))
         for pos in cop_positions:
             new_cop = Police(pos[0], pos[1], hitbox_objects, spawn_pos=pos)
             police.append(new_cop)
-            print("police:", pos)
-    sprites = pygame.sprite.Group(player, obstacles, police)
+
+    # sprites = pygame.sprite.Group(player, obstacles, police)
+    sprites = pygame.sprite.Group(player, *obstacles, *police)
 
     # print(f"Loaded {len(hitbox_objects)} hitbox objects from map.")
     # print(hitbox_objects)
@@ -128,6 +156,7 @@ def main():
                         player.image = player.image_normal
                         picked_up_bike = None
                         score += 100
+                        player.start_throw_animation()
                     elif colliding_Bike and not picked_up_bike:
                         picked_up_bike = colliding_Bike
                         sprites.remove(colliding_Bike)
@@ -200,3 +229,5 @@ if __name__ == "__main__":
     main()
     #asyncio.run(main())
     #asyncio.run(main())
+
+    
