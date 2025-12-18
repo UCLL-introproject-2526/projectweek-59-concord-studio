@@ -27,6 +27,8 @@ def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
         )
 
 async def main():
+    print("main BOOT OK")
+    pygame.init()
     pygame.init()
 
     screen_width = 800
