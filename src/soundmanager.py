@@ -2,7 +2,7 @@ import pygame
 
 class SoundManager:
     def __init__(self):
-        pygame.mixer.init()
+        pygame.mixer.init(frequency=22050, size=-16, channels=4, buffer=4096)
         self.sounds = {
             "chase": pygame.mixer.Sound("../assets/sfx/audio cop chase.wav"),
             "bike_throw": pygame.mixer.Sound("../assets/sfx/bike throw.wav"),

@@ -82,7 +82,7 @@ def main():
                 obj['rect'].width,
                 obj['rect'].height,
                 obstacle_type=obj['type'],
-                transparency=0,
+                transparency=150,
                 passthrough=False
             )
             obstacles.append(obstacle)
@@ -130,6 +130,9 @@ def main():
 
         for pos in selected_cops_positions:
             new_cop = Police(pos[0], pos[1], hitbox_objects)
+        cop_positions = random.sample(possible_cop_positions, min(amount_of_cops, len(possible_cop_positions)))
+        for pos in cop_positions:
+            new_cop = Police(pos[0], pos[1], hitbox_objects, spawn_pos=pos)
             police.append(new_cop)
 
     # sprites = pygame.sprite.Group(player, obstacles, police)
@@ -155,6 +158,7 @@ def main():
                         player.image = player.image_normal
                         picked_up_bike = None
                         score += 100
+                        player.start_throw_animation()
                     elif colliding_Bike and not picked_up_bike:
                         picked_up_bike = colliding_Bike
                         sprites.remove(colliding_Bike)
@@ -169,7 +173,6 @@ def main():
                         picked_up_bike = None
 
         old_pos_player = player.get_position()
-        old_pos_police = [p.get_position() for p in police]
         keys = pygame.key.get_pressed()
         player.update(keys, picked_up_bike)
         camera.follow(player)
@@ -177,8 +180,12 @@ def main():
 
         if picked_up_bike:
             for p in police:
+                p.set_speed(3)
                 p.update(player.get_rect())
-                print(p.get_position())
+        # else: # add timer so that cops dont instantly walk back to spawn
+        #     for p in police:
+        #         #p.set_speed(3)
+        #         p.update(player.get_rect(), go_to_spawn=True)
 
         current_colliding_bike = None
 
@@ -192,11 +199,6 @@ def main():
                     current_colliding_bike = obstacle
 
         colliding_Bike = current_colliding_bike
-
-        for p, old_pos in zip(police, old_pos_police):
-            for obstacle in obstacles:
-                if obstacle.collides_with(p.rect) and not obstacle.is_passthrough():
-                    p.set_position(old_pos)
 
         if picked_up_bike:
             for p in police:
@@ -229,3 +231,5 @@ if __name__ == "__main__":
     main()
     #asyncio.run(main())
     #asyncio.run(main())
+
+    
