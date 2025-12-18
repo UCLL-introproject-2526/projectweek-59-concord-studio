@@ -67,7 +67,11 @@ async def main():
     #score bored GMH
     score = 0
     pygame.font.init()
-    score_font = pygame.font.SysFont("consolas", 36)  
+    score_font = pygame.font.SysFont("consolas", 24) 
+    scoreBored_Path = '../assets/images/instructions_score_opacity.png'
+    scoreBored_img = pygame.image.load(scoreBored_Path).convert_alpha()
+    scoreBored_img = pygame.transform.scale(scoreBored_img,(150,150))
+   
 
     sprites = pygame.sprite.Group(player, *obstacles, *police, )
 
@@ -91,7 +95,7 @@ async def main():
         elif obj['type'] == 'cop':
             possible_cop_positions.append((obj['rect'].x, obj['rect'].y))
     print("cop len: ", len(possible_cop_positions))
-
+    
     amount_of_bikes = 30
     bike_positions = random.sample(possible_bike_positions, min(amount_of_bikes, len(possible_bike_positions)))
     for pos in bike_positions:
@@ -251,8 +255,9 @@ async def main():
 
         draw(screen, camera, sprites, bgBig, bgBig.get_rect())
         #draw score gmh
-        score_text = score_font.render(f"SCORE:{score}",True,(255,255,255))
-        screen.blit(score_text,(10,10))
+        score_text = score_font.render(f"    {score}",True,(255,255,255))
+        screen.blit(score_text,(50,20))
+        screen.blit(scoreBored_img,(10,10))
 
         pygame.display.flip()
         clock.tick(60)
