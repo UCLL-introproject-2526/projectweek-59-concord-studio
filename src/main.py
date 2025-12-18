@@ -170,9 +170,13 @@ def main():
                         player.image = player.image_normal
                         picked_up_bike = None
 
-        old_pos_player = player.get_position()
+
         keys = pygame.key.get_pressed()
+
+        old_pos_player = player.get_position()
         player.update(keys, picked_up_bike)
+        desired_pos_player = player.get_position()
+
         camera.follow(player)
         screen.fill((255, 255, 255))
 
@@ -180,21 +184,44 @@ def main():
             for p in police:
                 p.set_speed(3)
                 p.update(player.get_rect())
-        # else: # add timer so that cops dont instantly walk back to spawn
-        #     for p in police:
-        #         #p.set_speed(3)
-        #         p.update(player.get_rect(), go_to_spawn=True)
+
+        # for obstacle in obstacles:
+        #     if obstacle.collides_with(player.rect):
+        #
+        #         if not obstacle.is_passthrough():
+        #             player.set_position(old_pos_player)
+        #
+        #         if obstacle.is_bike():
+        #             current_colliding_bike = obstacle
+        player.set_position(old_pos_player)
+        player.set_position((desired_pos_player[0], old_pos_player[1]))
 
         current_colliding_bike = None
+        for obstacle in obstacles:
+            if obstacle.collides_with(player.rect):
+                if not obstacle.is_passthrough():
+
+                    if player.rect.centerx > obstacle.rect.centerx:
+                        player.rect.left = obstacle.rect.right
+                    else:
+                        player.rect.right = obstacle.rect.left
+                if obstacle.is_bike():
+                    current_colliding_bike = obstacle
+
+        resolved_x, _ = player.get_position()
+        player.set_position((resolved_x, desired_pos_player[1]))
 
         for obstacle in obstacles:
             if obstacle.collides_with(player.rect):
-
                 if not obstacle.is_passthrough():
-                    player.set_position(old_pos_player)
 
+                    if player.rect.centery > obstacle.rect.centery:
+                        player.rect.top = obstacle.rect.bottom
+                    else:
+                        player.rect.bottom = obstacle.rect.top
                 if obstacle.is_bike():
                     current_colliding_bike = obstacle
+
 
         colliding_Bike = current_colliding_bike
 
