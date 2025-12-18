@@ -1,5 +1,8 @@
 import pygame
 import sys
+from src.soundmanager import SoundManager 
+
+sound = SoundManager()
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -12,30 +15,28 @@ CREDITS_DATA = [
     "IMG:assets/images/LogoName.png",
     "IMG:assets/images/cop_running_2.png" 
     "",
-    "--- DEVELOPED BY ---",
-    "Concord Studios",
-    "",
-    "IMG:assets/images/cop_running_2.png" 
-    "Adan",
-    "IMG:assets/images/cop_running_2.png" 
-    "Aidan",
-    "IMG:assets/images/cop_running_2.png" 
-    "Gavin",
-    "IMG:assets/images/cop_running_2.png" 
-    "Noah",
-    "IMG:assets/images/cop_running_2.png" 
-    "Vedat",
-    "--- ASSETS ---",
-    "Backgrounds: Artist Name",
+    "--- DEVELOPERS ---",
+    "IMG:assets/images/Adan_8bit.png",
+    "ADAN FLORES",
+    "IMG:assets/images/Aidan_8bit.png",
+    "AIDAN COSSU",
+    "IMG:assets/images/Gavin_8bit.png",
+    "GAVIN MCHUGH",
+    "IMG:assets/images/Noah_8bit.png",
+    "NOAH COSSU",
+    "IMG:assets/images/Vedat_8bit.png",
+    "VEDAT CINGOZ",
+    "--- BACKGROUND ---",
+    "ADAN FLORES",
     "--- SPRITES ---",
-    "Charles George Peter Twinnings",
-    "Geminaia Goggings",
-
-    "IMG:assets/images/", 
+    "CHARLES GEORGE PETER TWINNINGS",
+    "GEMINIAIA GOOGLINGS",
     "",
     "--- SPECIAL THANKS ---",
-    "..........",
+    "TO RAZA FOR NOT PUSHING\nAND BREAKING THE GAME!",
     "",
+    "A Concord Studios game",
+    "IMG:assets/images/concord_8bit.png",
     "THANKS FOR PLAYING!"
 ]
 
@@ -107,6 +108,7 @@ def show_credits(screen, width, height):
     
     running = True
     while running:
+        sound.play_sound("credits")
         screen.fill(BLACK) 
         
         for event in pygame.event.get():
@@ -136,3 +138,4 @@ def show_credits(screen, width, height):
 
         pygame.display.flip()
         clock.tick(60)
+    sound.stop_sound("credits")
