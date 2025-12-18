@@ -15,20 +15,22 @@ import asyncio
 import math
 import mini_map
 
-icon = pygame.image.load('assets/images/cop_run_1.png')
-bg = pygame.image.load('assets/images/background.png')
-scoreBored_Path = 'assets/images/instructions_score_opacity.png'
-def draw(screen, camera, sprites, bgBig = None, bg_rect = None):
-    if bgBig and bg_rect:
-        screen.blit(bgBig, bg_rect.topleft - camera.offset)
 
-    for sprite in sprites:
-        screen.blit(
-            sprite.image,
-            sprite.rect.topleft - camera.offset
-        )
 
 async def main():
+    icon = pygame.image.load('assets/images/cop_run_1.png')
+    bg = pygame.image.load('assets/images/background.png')
+    scoreBored_Path = 'assets/images/instructions_score_opacity.png'
+
+    def draw(screen, camera, sprites, bgBig=None, bg_rect=None):
+        if bgBig and bg_rect:
+            screen.blit(bgBig, bg_rect.topleft - camera.offset)
+
+        for sprite in sprites:
+            screen.blit(
+                sprite.image,
+                sprite.rect.topleft - camera.offset
+            )
     print("main BOOT OK")
     pygame.init()
     pygame.init()
@@ -100,7 +102,7 @@ async def main():
         elif obj['type'] == 'cop':
             possible_cop_positions.append((obj['rect'].x, obj['rect'].y))
     print("cop len: ", len(possible_cop_positions))
-    
+
     amount_of_bikes = 30
     bike_positions = random.sample(possible_bike_positions, min(amount_of_bikes, len(possible_bike_positions)))
     for pos in bike_positions:
@@ -132,7 +134,7 @@ async def main():
                 if dist < min_distance_between_cops:
                     is_far_enough = False
                     break
-            
+
             if is_far_enough:
                 selected_cops_positions.append(pos)
 
@@ -283,9 +285,9 @@ async def main():
 
     pygame.quit()
 
-if __name__ == "__main__":
+
     #main()
-    asyncio.run(main())
+asyncio.run(main())
     #asyncio.run(main())
 
     
