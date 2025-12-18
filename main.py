@@ -13,7 +13,7 @@ import src.menu
 import src.end_screen
 import asyncio
 import math
-#import mini_map
+import mini_map
 
 
 
@@ -48,6 +48,10 @@ async def main():
     bgBig = pygame.transform.scale(bg, (bg.get_size()[0] * 2, bg.get_size()[1] * 2)).convert()
     world_width, world_height = bgBig.get_size()
     print(world_width, world_height)
+
+    #mini_map
+
+    minimap_surface,minimap_pos,SCALE_X,SCALE_Y = mini_map.create_minimap(world_width,world_height,screen_width)
 
 
     pygame.display.set_caption("No Lock, No Mercy")
@@ -253,17 +257,30 @@ async def main():
             for p in police:
                 p.idle()
 
-        
+        draw(screen, camera, sprites, bgBig, bgBig.get_rect())
+
+        # draw score UI
+        score_text = score_font.render(f"    {score}", True, (255, 255, 255))
+        screen.blit(score_text, (50, 20))
+        screen.blit(scoreBored_img, (10, 10))
+
+        # draw minimap on top
+        mini_map.draw_minimap(
+            minimap_surface,
+            minimap_pos,
+            SCALE_X,
+            SCALE_Y,
+            screen,
+            player,
+            obstacles,
+            police,
+            camera
+        )
 
         # player out of bounds
-        if player.rect.left < 0 or player.rect.right > world_width or player.rect.top < 0 or player.rect.bottom > world_height:
+        if (player.rect.left < 0 or player.rect.right > world_width or
+            player.rect.top  < 0 or player.rect.bottom > world_height):
             player.set_position(old_pos_player)
-
-        draw(screen, camera, sprites, bgBig, bgBig.get_rect())
-        #draw score gmh
-        score_text = score_font.render(f"    {score}",True,(255,255,255))
-        screen.blit(score_text,(50,20))
-        screen.blit(scoreBored_img,(10,10))
 
         pygame.display.flip()
         clock.tick(60)
