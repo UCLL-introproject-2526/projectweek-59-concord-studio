@@ -1,16 +1,16 @@
 import pygame
 import sys
-from soundmanager import SoundManager
+from src.soundmanager import SoundManager
+import asyncio
 
+BACKGROUND_IMAGE = 'assets/images/main_menu.png'
 
-BACKGROUND_IMAGE = '../assets/images/main_menu.png'
-
-PLAY_NORMAL_IMAGE = '../assets/images/play.png'
-PLAY_HOVER_IMAGE = '../assets/images/play_selected.png'
-CREDITS_NORMAL_IMAGE = '../assets/images/credits.png'
-CREDITS_HOVER_IMAGE = '../assets/images/credits_selected.png'
-QUIT_NORMAL_IMAGE = '../assets/images/quit.png'
-QUIT_HOVER_IMAGE = '../assets/images/quit_selected.png'
+PLAY_NORMAL_IMAGE = 'assets/images/play.png'
+PLAY_HOVER_IMAGE = 'assets/images/play_selected.png'
+CREDITS_NORMAL_IMAGE = 'assets/images/credits.png'
+CREDITS_HOVER_IMAGE = 'assets/images/credits_selected.png'
+QUIT_NORMAL_IMAGE = 'assets/images/quit.png'
+QUIT_HOVER_IMAGE = 'assets/images/quit_selected.png'
 
 TARGET_WIDTH = 230
 TARGET_HEIGHT = 210
@@ -18,7 +18,7 @@ COLLISION_SHRINK_Y = 70
 VERTICAL_GAP = 70
 Y_OFFSET = 160
 
-def show_menu(screen, width, height):
+async def show_menu(screen, width, height):
     pygame.font.init() 
 
     try:
@@ -158,6 +158,7 @@ def show_menu(screen, width, height):
                 screen.blit(option["normal_img"], (draw_x, draw_y))
         
         pygame.display.flip()
+        await asyncio.sleep(0)
 
 
 

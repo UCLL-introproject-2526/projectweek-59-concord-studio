@@ -1,17 +1,17 @@
 import pygame
 import sys
-from soundmanager import SoundManager
-
-BACKGROUND_IMAGE = '../assets/images/game_over_screen.png'
-RESTART_NORMAL = '../assets/images/try_again.png'
-RESTART_HOVER = '../assets/images/try_again_selected.png'
+from src.soundmanager import SoundManager
+import asyncio
+BACKGROUND_IMAGE = 'assets/images/game_over_screen.png'
+RESTART_NORMAL = 'assets/images/try_again.png'
+RESTART_HOVER = 'assets/images/try_again_selected.png'
 
 TARGET_WIDTH = 200
 TARGET_HEIGHT = 180
 COLLISION_SHRINK_Y = 15
 Y_OFFSET = 170
 
-def show_end_screen(screen, width, height):
+async def show_end_screen(screen, width, height):
     try:
         restart_n = pygame.transform.scale(pygame.image.load(RESTART_NORMAL).convert_alpha(), (TARGET_WIDTH, TARGET_HEIGHT))
         restart_h = pygame.transform.scale(pygame.image.load(RESTART_HOVER).convert_alpha(), (TARGET_WIDTH, TARGET_HEIGHT))
@@ -69,3 +69,4 @@ def show_end_screen(screen, width, height):
             screen.blit(opt["normal"], (draw_x, draw_y))
 
         pygame.display.flip()
+        await asyncio.sleep(0)
