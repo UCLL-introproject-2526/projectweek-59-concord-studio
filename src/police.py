@@ -24,12 +24,12 @@ class Police(pygame.sprite.Sprite):
 
         self.idle_image = self.image_normal
         self.current_frame = 0
-        self.animation_interval_ms = 450 #ms
+        self.animation_interval_ms = 525 #ms
         self.last_animation_time = pygame.time.get_ticks()
 
         self.idle_image = self.image_normal
         self.current_frame = 0
-        self.animation_speed = 5  # frames per image
+        self.animation_speed = 5  #frames per image
 
 
         self.image = self.image_normal
@@ -96,7 +96,6 @@ class Police(pygame.sprite.Sprite):
         while open_set:
             _, current = heapq.heappop(open_set)
             if current == goal:
-                # reconstruct path
                 path = [current]
                 while current in came_from:
                     current = came_from[current]
@@ -114,7 +113,7 @@ class Police(pygame.sprite.Sprite):
                         fscore[neighbor] = f
                     heapq.heappush(open_set, (f, neighbor))
 
-        return None  # no path
+        return None
 
     def _find_nearest_unblocked(self, pos, max_radius=10):
         if pos not in self.blocked:
@@ -212,15 +211,13 @@ class Police(pygame.sprite.Sprite):
 
         now = pygame.time.get_ticks()
         if self.path or (Vector2(target_rect.center) - self._pos).length() > 0:
-            # Cop is moving
             if now - self.last_animation_time >= self.animation_interval_ms:
                 self.current_frame = (self.current_frame + 1) % len(self.running_images)
                 self.last_animation_time = now
             self.image = self.running_images[self.current_frame]
-        else:
-            # Cop is idle
-            self.image = self.idle_image
 
+    def idle(self):
+        self.image = self.idle_image
     def draw(self, surface):
         surface.blit(self.image, self.rect)
 

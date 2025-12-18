@@ -249,6 +249,9 @@ async def main():
                     if result == "restart":
                         await main()
                     return
+        else:
+            for p in police:
+                p.idle()
 
         
 
