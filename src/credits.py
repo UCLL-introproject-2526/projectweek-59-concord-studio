@@ -13,8 +13,8 @@ LINE_SPACING = 40
 IMAGE_WIDTH = 150 
 
 CREDITS_DATA = [
-    "IMG:assets/images/LogoName.png",
-    "IMG:assets/images/credits_jail.png" 
+    "IMG:assets/images/LogoName.png|400",
+    "IMG:assets/images/credits_jail.png|300",
     "",
     "--- DEVELOPERS ---",
     "IMG:assets/images/Adan_8bit.png",
@@ -46,7 +46,7 @@ async def show_credits(screen, width, height):
     clock = pygame.time.Clock()
     
     font_path = "assets/Perfect_DOS_VGA_437.ttf" 
-    
+
     try:
         font = pygame.font.Font(font_path, 36)
         title_font = pygame.font.Font(font_path, 60) 
@@ -59,38 +59,38 @@ async def show_credits(screen, width, height):
     current_y_offset = 0
 
     for item in CREDITS_DATA:
-        if not item.startswith("IMG:"):
-            if item == "NO LOCK, NO MERCY": 
-                asset_surface = title_font.render(item, True, WHITE)
-            else:
-                asset_surface = font.render(item, True, WHITE)
-
         asset_surface = None
         item_height = 0
 
         if item.startswith("IMG:"):
-            image_path = item.split("IMG:")[1]
+            parts = item.split("IMG:")[1].split("|")
+            image_path = parts[0]
+            current_width = int(parts[1]) if len(parts) > 1 else IMAGE_WIDTH
+            
             try:
                 img = pygame.image.load(image_path).convert_alpha()
-                
                 aspect_ratio = img.get_height() / img.get_width()
-                target_height = int(IMAGE_WIDTH * aspect_ratio)
-                img = pygame.transform.scale(img, (IMAGE_WIDTH, target_height))
+                target_height = int(current_width * aspect_ratio)
+                img = pygame.transform.scale(img, (current_width, target_height))
                 
                 asset_surface = img
                 item_height = target_height
             except Exception as e:
-                print(f"Error loading credit image '{image_path}': {e}")
-                asset_surface = pygame.Surface((IMAGE_WIDTH, IMAGE_WIDTH))
+                print(f"Error loading image {image_path}: {e}")
+                asset_surface = pygame.Surface((current_width, current_width))
                 asset_surface.fill((255, 0, 0))
-                item_height = IMAGE_WIDTH
+                item_height = current_width
+
         else:
             if item.strip() == "":
-                 asset_surface = None
-                 item_height = FONT_SIZE // 2 
+                asset_surface = None
+                item_height = LINE_SPACING 
             else:
-                 asset_surface = font.render(item, True, WHITE)
-                 item_height = asset_surface.get_height()
+                if item == "THANKS FOR PLAYING!" or item == "--- DEVELOPERS ---":
+                    asset_surface = title_font.render(item, True, WHITE)
+                else:
+                    asset_surface = font.render(item, True, WHITE)
+                item_height = asset_surface.get_height()
 
         if asset_surface:
             loaded_assets.append({
@@ -102,9 +102,7 @@ async def show_credits(screen, width, height):
         current_y_offset += item_height + LINE_SPACING
 
     total_content_height = current_y_offset
-    
     scroll_y = height 
-    
     waiting = False
     wait_start_time = 0
     
@@ -135,7 +133,6 @@ async def show_credits(screen, width, height):
 
         for asset in loaded_assets:
             draw_y = scroll_y + asset['y_rel']
-            
             if -asset['height'] < draw_y < height:
                 rect = asset['surf'].get_rect(center=(width // 2, draw_y + asset['height'] // 2))
                 screen.blit(asset['surf'], rect)
@@ -143,4 +140,5 @@ async def show_credits(screen, width, height):
         pygame.display.flip()
         clock.tick(60)
         await asyncio.sleep(0)
+    
     sound.stop_sound("credits")
