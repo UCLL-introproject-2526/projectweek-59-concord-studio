@@ -14,6 +14,7 @@ import src.end_screen
 import asyncio
 import math
 import src.mini_map
+import src.win_screen
 
 
 
@@ -168,15 +169,22 @@ async def main():
                     running = False
 
                 if event.key == pygame.K_e:
-                    near_water = any(obs.can_interact(player.rect) for obs in obstacles)
+                    near_water = any(obs.can_interact(player.rect) for obs in obstacles if obs.obstacle_type == 'water')
 
                     if picked_up_bike and near_water:
                         sound.play_sound("bike_throw")
-                        print("You threw the bike in the water.")
                         player.image = player.image_normal
                         picked_up_bike = None
                         score += 100
                         player.start_throw_animation()
+
+                        bikes_left = len([obs for obs in obstacles if hasattr(obs, 'is_bike') and obs.is_bike()])
+                        
+                        if bikes_left == 0:
+                            result = await src.win_screen.show_win_screen(screen, screen_width, screen_height)
+                            if result == "menu":
+                                await main()
+                                return
                     elif colliding_Bike and not picked_up_bike:
                         picked_up_bike = colliding_Bike
                         sprites.remove(colliding_Bike)
