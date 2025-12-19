@@ -1,6 +1,7 @@
 import pygame
 import sys
 from src.soundmanager import SoundManager 
+import asyncio
 
 sound = SoundManager()
 
@@ -40,7 +41,7 @@ CREDITS_DATA = [
     "THANKS FOR PLAYING!"
 ]
 
-def show_credits(screen, width, height):
+async def show_credits(screen, width, height):
     clock = pygame.time.Clock()
     
     font_path = "assets/Perfect_DOS_VGA_437.ttf" 
@@ -116,6 +117,7 @@ def show_credits(screen, width, height):
                 pygame.quit(); sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE or event.key == pygame.K_RETURN:
+                    sound.stop_sound("credits")
                     return
 
         if not waiting:
@@ -127,6 +129,7 @@ def show_credits(screen, width, height):
                 wait_start_time = pygame.time.get_ticks()
         else:
             if pygame.time.get_ticks() - wait_start_time > 5000:
+                sound.stop_sound("credits")
                 return
 
         for asset in loaded_assets:
@@ -138,4 +141,4 @@ def show_credits(screen, width, height):
 
         pygame.display.flip()
         clock.tick(60)
-    sound.stop_sound("credits")
+        await asyncio.sleep(0)

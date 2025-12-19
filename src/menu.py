@@ -19,6 +19,7 @@ COLLISION_SHRINK_Y = 70
 VERTICAL_GAP = 70
 Y_OFFSET = 160
 
+
 async def show_menu(screen, width, height):
     pygame.font.init() 
 
@@ -97,9 +98,9 @@ async def show_menu(screen, width, height):
 
     running = True
     sound = SoundManager()
-    sound.play_sound("menu_music", loops=-1) 
+    sound.play_sound("menu_music", loops=-1)
     while running:
-        
+
         
 
         mouse_pos = pygame.mouse.get_pos()
@@ -118,8 +119,10 @@ async def show_menu(screen, width, height):
                                 sound.stop_sound("menu_music")
                                 sound.play_sound("start_up_sfx")
                                 return
-                            elif option["action"] == "credits": 
-                                show_credits(screen, width, height)
+                            elif option["action"] == "credits":
+                                sound.stop_sound("menu_music")
+                                await show_credits(screen, width, height)
+                                sound.play_sound("menu_music", loops=-1)
                             elif option["action"] == "quit":
                                 pygame.quit(); sys.exit()
             
