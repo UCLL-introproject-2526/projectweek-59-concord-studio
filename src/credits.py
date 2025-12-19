@@ -142,3 +142,4 @@ async def show_credits(screen, width, height):
         pygame.display.flip()
         clock.tick(60)
         await asyncio.sleep(0)
+    sound.stop_sound("credits")
