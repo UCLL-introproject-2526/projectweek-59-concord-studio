@@ -228,7 +228,6 @@ async def main():
 
         now = pygame.time.get_ticks()
 
-        print(now - previous_tick_bike_chase)
         if picked_up_bike or now - previous_tick_bike_chase < cop_chase_time_ms:
             if picked_up_bike:
                 previous_tick_bike_chase = now
@@ -237,7 +236,7 @@ async def main():
                 player.set_speed(6)
 
             sound.stop_sound("background")
-            sound.play_sound("chase")
+            sound.play_sound("chase", volume=0.3, loops=-1)
 
             for p in police:
                 p.set_speed(3)
@@ -252,7 +251,7 @@ async def main():
                     return
         else:
             sound.stop_sound("chase")
-            sound.play_sound("background")
+            sound.play_sound("background", loops=-1)
             for p in police:
                 p.idle()
 
