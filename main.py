@@ -78,6 +78,8 @@ async def main():
     police = []
     obstacles = [Bike(200, 900, 90, 60, color=(0, 255, 0), transparency=150, passthrough=True)]
     previous_tick_bike_chase = 0
+    cop_chase_time_ms = 2000
+
     #score bored GMH
     score = 0
     pygame.font.init()
@@ -224,11 +226,10 @@ async def main():
 
         colliding_Bike = current_colliding_bike
 
-
         now = pygame.time.get_ticks()
 
         print(now - previous_tick_bike_chase)
-        if picked_up_bike or now - previous_tick_bike_chase < 2000:
+        if picked_up_bike or now - previous_tick_bike_chase < cop_chase_time_ms:
             if picked_up_bike:
                 previous_tick_bike_chase = now
                 player.set_speed(4)
