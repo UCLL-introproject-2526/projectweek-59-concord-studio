@@ -219,7 +219,7 @@ class Police(pygame.sprite.Sprite):
             else:
                 self.path = []
                 self.path_index = 0
-        else:
+        elif not go_to_spawn:
             epsilon = 5
             target_center = Vector2(target_rect.center)
             delta = target_center - self._pos
