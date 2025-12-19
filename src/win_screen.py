@@ -16,6 +16,7 @@ async def show_win_screen(screen, screen_width, screen_height):
 
     running = True
     while running:
+        # sound.play_sound("win")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()

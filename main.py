@@ -110,7 +110,7 @@ async def main():
             possible_cop_positions.append((obj['rect'].x, obj['rect'].y))
     print("hitboxes len: ", len(obstacles))
 
-    amount_of_bikes = 30
+    amount_of_bikes = 1
     bike_positions = random.sample(possible_bike_positions, min(amount_of_bikes, len(possible_bike_positions)))
     for pos in bike_positions:
         bike = Bike(pos[0], pos[1], 100, 50, color=(0, 255, 0), transparency=150)
@@ -299,6 +299,7 @@ async def main():
         clock.tick(60)
         await asyncio.sleep(0)
 
+    sound.stop_sound("menu_music")
     pygame.quit()
 
 
