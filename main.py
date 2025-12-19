@@ -33,7 +33,6 @@ async def main():
             )
     print("main BOOT OK")
     pygame.init()
-    pygame.init()
 
     screen_width = 800
     screen_height = 600
@@ -51,7 +50,16 @@ async def main():
 
     #mini_map
 
-    minimap_surface,minimap_pos,SCALE_X,SCALE_Y = src.mini_map.create_minimap(world_width,world_height,screen_width)
+    mini_map_img = pygame.image.load('assets/images/mini_map.png').convert_alpha()
+
+    minimap_surface, minimap_pos, SCALE_X, SCALE_Y, scaled_minimap_bg = src.mini_map.create_minimap(
+        world_width, 
+        world_height, 
+        screen_width, 
+        mini_map_img  
+    )
+
+    # minimap_surface,minimap_pos,SCALE_X,SCALE_Y = src.mini_map.create_minimap(world_width,world_height,screen_width)
     
     pygame.display.set_caption("No Lock, No Mercy")
     clock = pygame.time.Clock()
@@ -264,6 +272,7 @@ async def main():
         screen.blit(score_text, (50, 20))
         screen.blit(scoreBored_img, (10, 10))
          # draw minimap on top
+
         src.mini_map.draw_minimap(
             minimap_surface,
             minimap_pos,
@@ -273,7 +282,8 @@ async def main():
             player,
             obstacles,
             police,
-            camera
+            camera,
+            scaled_minimap_bg  
         )
 
         # player out of bounds
