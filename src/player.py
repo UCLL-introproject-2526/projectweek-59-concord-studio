@@ -74,7 +74,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.y += self.speed
             moving = True
 
-        self.speed = 1 if keys[pygame.K_LSHIFT] else 5
+        self.speed = 5 if keys[pygame.K_LSHIFT] else 5
 
         now = pygame.time.get_ticks()
 

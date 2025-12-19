@@ -38,7 +38,6 @@ class Hitbox:
                 hitbox_type = Hitbox.COLOR_MAP.get(pixel_color)
 
                 if hitbox_type and hitbox_type in Hitbox.OBSTACLE_TYPES:
-                    
                     scaled_x = x * Hitbox.SCALE_FACTOR
                     scaled_y = y * Hitbox.SCALE_FACTOR
                     
