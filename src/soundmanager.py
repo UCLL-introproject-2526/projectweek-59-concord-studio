@@ -22,3 +22,13 @@ class SoundManager:
     def stop_sound(self, sound_name):
         if sound_name in self.sounds:
             self.sounds[sound_name].stop()
+
+    def load_chase_music(self):
+        if not pygame.mixer.music.get_busy():
+            pygame.mixer.music.load("assets/sfx/chase.ogg")
+            pygame.mixer.music.set_volume(0.5)
+            pygame.mixer.music.play(-1)
+
+    def stop_chase_music(self):
+        if pygame.mixer.music.get_busy():
+            pygame.mixer.music.stop()

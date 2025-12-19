@@ -165,7 +165,7 @@ async def main():
                     near_water = any(obs.can_interact(player.rect) for obs in obstacles if obs.obstacle_type == 'water')
 
                     if picked_up_bike and near_water:
-                        sound.play_sound("bike_throw")
+                        sound.play_sound("bike_throw", volume=1)
                         player.image = player.image_normal
                         picked_up_bike = None
                         score += 100
@@ -244,14 +244,14 @@ async def main():
                 player.set_speed(6)
 
             sound.stop_sound("background")
-            sound.play_sound("chase", volume=0.3, loops=-1)
+            sound.load_chase_music()
 
             for p in police:
                 p.set_speed(3)
                 p.update(player.get_rect())
                 p.update(player.get_rect())
                 if p.rect.colliderect(player.rect):
-                    sound.stop_sound("chase")
+                    sound.stop_chase_music()
                     sound.play_sound("game_over")
                     result = await src.end_screen.show_end_screen(screen, screen_width, screen_height)
                     if result == "restart":
