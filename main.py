@@ -300,7 +300,6 @@ async def main():
         clock.tick(60)
         await asyncio.sleep(0)
 
-    sound.stop_sound("menu_music")
     pygame.quit()
 
 
