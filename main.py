@@ -21,6 +21,7 @@ async def main():
     icon = pygame.image.load('assets/images/cop_run_1.png')
     bg = pygame.image.load('assets/images/background.png')
     scoreBored_Path = 'assets/images/instructions_score_opacity.png'
+    loading_bg = pygame.image.load('assets/images/loading_screen.png')
 
     def draw(screen, camera, sprites, bgBig=None, bg_rect=None):
         if bgBig and bg_rect:
@@ -45,7 +46,9 @@ async def main():
     screen.fill((0, 0, 0))
     loading_font = pygame.font.SysFont("consolas", 36)
     loading_text = loading_font.render("Loading...", True, (255, 255, 255))
-    screen.blit(bg, (0, 0)) # TODO: change bg image to loading bg
+
+    loading_bg = pygame.transform.scale(loading_bg, (screen_width, screen_height))
+    screen.blit(loading_bg, (0, 0))
 
     loading_box = pygame.Surface((300, 100))
     loading_box.set_alpha(200)
@@ -113,7 +116,7 @@ async def main():
                 obj['rect'].width,
                 obj['rect'].height,
                 obstacle_type=obj['type'],
-                transparency=150,
+                transparency=0,
                 passthrough=False
             )
             obstacles.append(obstacle)
@@ -124,7 +127,7 @@ async def main():
             possible_cop_positions.append((obj['rect'].x, obj['rect'].y))
     print("hitboxes len: ", len(obstacles))
 
-    amount_of_bikes = 1
+    amount_of_bikes = 30
     bike_positions = random.sample(possible_bike_positions, min(amount_of_bikes, len(possible_bike_positions)))
     for pos in bike_positions:
         bike = Bike(pos[0], pos[1], 100, 50, color=(0, 255, 0), transparency=150)
@@ -177,7 +180,7 @@ async def main():
                     near_water = any(obs.can_interact(player.rect) for obs in obstacles if obs.obstacle_type == 'water')
 
                     if picked_up_bike and near_water:
-                        sound.play_sound("bike_throw", volume=1)
+                        sound.play_sound("bike_splash", volume=1)
                         player.image = player.image_normal
                         picked_up_bike = None
                         score += 100

@@ -10,8 +10,8 @@ class SoundManager:
             "start_up_sfx": pygame.mixer.Sound("assets/sfx/game_start_up.ogg"),
             "menu_music": pygame.mixer.Sound("assets/sfx/menu_music.ogg"), #added
             "game_over": pygame.mixer.Sound("assets/sfx/game_over.ogg"), #added
-            "credits": pygame.mixer.Sound("assets/sfx/credits.ogg")
-
+            "credits": pygame.mixer.Sound("assets/sfx/credits.ogg"),
+            "bike_splash": pygame.mixer.Sound("assets/sfx/bike_splash.ogg")
         }
 
     def play_sound(self, sound_name, volume=1, loops=0):
