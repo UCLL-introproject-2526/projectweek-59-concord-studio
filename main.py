@@ -41,7 +41,19 @@ async def main():
     #top left Icon GMH
     pygame.display.set_icon(icon)
 
+    # set loading screen before resource intensive tasks while using bg
+    screen.fill((0, 0, 0))
+    loading_font = pygame.font.SysFont("consolas", 36)
+    loading_text = loading_font.render("Loading...", True, (255, 255, 255))
+    screen.blit(bg, (0, 0)) # TODO: change bg image to loading bg
 
+    loading_box = pygame.Surface((300, 100))
+    loading_box.set_alpha(200)
+    loading_box.fill((0, 0, 0))
+
+    screen.blit(loading_box, (screen_width // 2 - 150, screen_height // 2 - 50))
+    screen.blit(loading_text, (screen_width // 2 - loading_text.get_width() // 2, screen_height // 2 - loading_text.get_height() // 2))
+    pygame.display.flip()
 
 
     bgBig = pygame.transform.scale(bg, (bg.get_size()[0] * 2, bg.get_size()[1] * 2)).convert()
