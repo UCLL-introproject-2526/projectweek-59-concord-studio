@@ -17,7 +17,6 @@ import src.mini_map
 import src.win_screen
 
 
-
 async def main():
     icon = pygame.image.load('assets/images/cop_run_1.png')
     bg = pygame.image.load('assets/images/background.png')
@@ -43,7 +42,7 @@ async def main():
     pygame.display.set_icon(icon)
 
 
-    await src.menu.show_menu(screen, screen_width, screen_height)
+
 
     bgBig = pygame.transform.scale(bg, (bg.get_size()[0] * 2, bg.get_size()[1] * 2)).convert()
     world_width, world_height = bgBig.get_size()
@@ -91,7 +90,7 @@ async def main():
     sprites = pygame.sprite.Group(player, *obstacles, *police, )
     hitbox_objects = Hitbox.load_map_objects('assets/images/hitbox_map.png')
 
-    print(len(hitbox_objects))
+
     for obj in hitbox_objects:
         if obj['type'] == 'house' or obj['type'] == 'water':
             obstacle = Obstacle(
@@ -100,7 +99,7 @@ async def main():
                 obj['rect'].width,
                 obj['rect'].height,
                 obstacle_type=obj['type'],
-                transparency=0,
+                transparency=150,
                 passthrough=False
             )
             obstacles.append(obstacle)
@@ -109,7 +108,7 @@ async def main():
             possible_bike_positions.append((obj['rect'].x, obj['rect'].y))
         elif obj['type'] == 'cop':
             possible_cop_positions.append((obj['rect'].x, obj['rect'].y))
-    print("cop len: ", len(possible_cop_positions))
+    print("hitboxes len: ", len(obstacles))
 
     amount_of_bikes = 30
     bike_positions = random.sample(possible_bike_positions, min(amount_of_bikes, len(possible_bike_positions)))
@@ -117,7 +116,6 @@ async def main():
         bike = Bike(pos[0], pos[1], 100, 50, color=(0, 255, 0), transparency=150)
         obstacles.append(bike)
         sprites.add(bike)
-        print(pos)
 
     amount_of_cops = 10
     min_distance_between_cops = 400
@@ -125,13 +123,8 @@ async def main():
     selected_cops_positions = []
 
     if possible_cop_positions:
-
         random.shuffle(possible_cop_positions)
-        # cop_positions = random.sample(possible_cop_positions, min(amount_of_cops, len(possible_cop_positions)))
         for pos in possible_cop_positions:
-            # new_cop = Police(pos[0], pos[1], hitbox_objects)
-            # police.append(new_cop)
-            # print("police:", pos)
             if len(selected_cops_positions) >= amount_of_cops:
                 break
 
@@ -146,16 +139,14 @@ async def main():
             if is_far_enough:
                 selected_cops_positions.append(pos)
 
-        for pos in selected_cops_positions:
-            new_cop = Police(pos[0], pos[1], hitbox_objects)
         cop_positions = random.sample(possible_cop_positions, min(amount_of_cops, len(possible_cop_positions)))
         for pos in cop_positions:
             new_cop = Police(pos[0], pos[1], hitbox_objects, spawn_pos=pos)
             police.append(new_cop)
 
-    # sprites = pygame.sprite.Group(player, obstacles, police)
     sprites = pygame.sprite.Group(player, *obstacles, *police)
 
+    await src.menu.show_menu(screen, screen_width, screen_height)
     # print(f"Loaded {len(hitbox_objects)} hitbox objects from map.")
     # print(hitbox_objects)
     while running:
