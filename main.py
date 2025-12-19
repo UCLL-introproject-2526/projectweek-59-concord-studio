@@ -78,6 +78,8 @@ async def main():
     possible_cop_positions = []
     police = []
     obstacles = [Bike(200, 900, 90, 60, color=(0, 255, 0), transparency=150, passthrough=True)]
+    previous_tick_bike_chase = 0
+    cop_chase_time_ms = 2000
 
     #score bored GMH
     score = 0
@@ -199,24 +201,7 @@ async def main():
         camera.follow(player)
         screen.fill((255, 255, 255))
 
-        if picked_up_bike:
-            sound.stop_sound("background")
-            sound.play_sound("chase")
-            for p in police:
-                p.set_speed(3)
-                p.update(player.get_rect())
-        else:
-            sound.stop_sound("chase")
-            sound.play_sound("background")
 
-        # for obstacle in obstacles:
-        #     if obstacle.collides_with(player.rect):
-        #
-        #         if not obstacle.is_passthrough():
-        #             player.set_position(old_pos_player)
-        #
-        #         if obstacle.is_bike():
-        #             current_colliding_bike = obstacle
         player.set_position(old_pos_player)
         player.set_position((desired_pos_player[0], old_pos_player[1]))
 
@@ -249,8 +234,21 @@ async def main():
 
         colliding_Bike = current_colliding_bike
 
-        if picked_up_bike:
+        now = pygame.time.get_ticks()
+
+        if picked_up_bike or now - previous_tick_bike_chase < cop_chase_time_ms:
+            if picked_up_bike:
+                previous_tick_bike_chase = now
+                player.set_speed(4)
+            else:
+                player.set_speed(6)
+
+            sound.stop_sound("background")
+            sound.play_sound("chase", volume=0.3, loops=-1)
+
             for p in police:
+                p.set_speed(3)
+                p.update(player.get_rect())
                 p.update(player.get_rect())
                 if p.rect.colliderect(player.rect):
                     sound.stop_sound("chase")
@@ -260,8 +258,11 @@ async def main():
                         await main()
                     return
         else:
+            sound.stop_sound("chase")
+            sound.play_sound("background", loops=-1)
             for p in police:
                 p.idle()
+
 
         # mini_map
         draw(screen, camera, sprites, bgBig, bgBig.get_rect())

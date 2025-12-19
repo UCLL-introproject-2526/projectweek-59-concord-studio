@@ -98,7 +98,7 @@ async def show_menu(screen, width, height):
 
     running = True
     sound = SoundManager()
-    sound.play_sound("menu_music", loops=-1)
+    sound.play_sound("menu_music", loops=-1, volume=2)
     while running:
 
         

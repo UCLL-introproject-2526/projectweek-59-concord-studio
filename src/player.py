@@ -1,7 +1,7 @@
 import pygame
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, speed=5):
+    def __init__(self, x, y, speed=6):
         super().__init__()
 
         self.facing_right = True
@@ -74,7 +74,6 @@ class Player(pygame.sprite.Sprite):
             self.rect.y += self.speed
             moving = True
 
-        self.speed = 5 if keys[pygame.K_LSHIFT] else 5
 
         now = pygame.time.get_ticks()
 
@@ -127,3 +126,5 @@ class Player(pygame.sprite.Sprite):
     def get_rect(self):
         return self.rect
     
+    def set_speed(self, speed):
+        self.speed = speed
